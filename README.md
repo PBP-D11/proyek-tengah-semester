@@ -12,9 +12,9 @@ Selamat datang ke repositori kelompok D11, yaitu aplikasi yang bernama EV-ryday!
 ## 🧑🏻‍💻 Pengembang Aplikasi : Kelompok - D11👩🏻‍💻
 
 - [Muhammad Hafizha Dhiyaulhaq (Hafizh)](https://github.com/hafizhdh) (2106750723)
-- [Fernando Nathaniel Sutanto (Nando)](https://github.com/nandonathaniel?tab=followers) (2106629995)
+- [Fernando Nathaniel Sutanto (Nando)](https://github.com/nandonathaniel) (2106629995)
 - [Nadhif Rahman Alfan (Nadhif)](https://github.com/nadhifralfan) (2106751783)
-- [Michael Baptiswa Marully Pangaribuan (Michael)](https://github.com/) (2106752054)
+- [Michael Baptiswa Marully Pangaribuan (Michael)](https://github.com/whosmichael) (2106752054)
 - [Fitria Dwi Cahya (Fitria)](https://github.com/fitriadc) (2106751410)
 - [Moreno Rassya Wibisana (Moreno)](https://github.com/morenoraw) (106752003)
 
