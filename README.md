@@ -45,17 +45,34 @@ Manfaat dari aplikasi EV-ryday adalah sebagai berikut:
 
 1. Bukan pengguna mobil listrik
 
-- Goals :Mencari informasi seputar kendaraan listrik, Bertanya seputar kendaraan listrik pada forum yang tersedia
-- Permasalahan : Ingin membeli mobil listrik tetapi masih awam mengenai mobil listrik, Bingung untuk bertanya seputar mobil listrik
+- Goals :
+  1. Mencari informasi seputar kendaraan listrik
+  2. Bertanya seputar kendaraan listrik pada forum yang tersedia
+  3. Mencari mobill listrik impian
+- Permasalahan : 
+  1. Ingin membeli mobil listrik tetapi masih awam mengenai mobil listrik
+  2. Bingung untuk bertanya seputar mobil listrik
 
 2. Pengguna Baru mobil listrik
 
-- Goals : Mencari informasi mengenai tips merawat mobil listrik, Mencari informasi mengenai charging station di sekitar tempat tinggalnya, Bergabung dengan komunitas mobil listrik untuk menambah relasi dan informasi
-- Permasalahan : Baru membeli mobil listrik dan tidak mengerti cara merawat mobil listrik dengan baik, Belum mempunyai home charging dan harus mencari charging station yang paling dekat dengan rumahnya, Tidak memiliki relasi sesama pengguna mobil listrik
+- Goals : 
+  1. Mencari informasi mengenai tips merawat mobil listrik
+  2. Mencari informasi mengenai charging station di sekitar tempat tinggalnya
+  3. Bergabung dengan komunitas mobil listrik untuk menambah relasi dan informasi
+- Permasalahan : 
+  1. Baru membeli mobil listrik dan tidak mengerti cara merawat mobil listrik dengan baik
+  2. Belum mempunyai home charging dan harus mencari charging station yang paling dekat dengan rumahnya
+  3. Tidak memiliki relasi sesama pengguna mobil listrik
 
 3. Pengguna Antusias Mobil Listrik
 
-- Goals : Membantu pengguna yang masih baru dalam dunia mobil listrik dengan aktif menjawab pada forum, Menambahkan charging station yang belum tercover oleh website
+- Goals : 
+  1. Membantu pengguna yang masih baru dalam dunia mobil listrik dengan aktif menjawab pada forum
+  2. Menambahkan charging station yang belum tercover oleh website
+- Permasalahan : 
+  1. Mencari tempat untuk sharing seputar mobil listrik
+  2. Menemukan charging station baru dan ingin sharing kepada komunitas
+
 
 ## 📝 Modul dan Pembagiannya 📝
 
