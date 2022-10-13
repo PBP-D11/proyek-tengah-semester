@@ -36,10 +36,10 @@ EV-ryday hadir untuk memberikan solusi bagi masalah tersebut. EV-ryday merupakan
 
 Aplikasi EV-ryday memiliki tujuan yakni menjadi sarana masyarakat untuk beralih kepada moda transportasi dengan sumber daya energi yang berkelanjutan dan lebih terbarukan pada masa yang akan datang.
 
-1. Manfaat dari aplikasi EV-ryday adalah sebagai berikut:
-2. Membantu pemilik kendaraan listrik lebih mudah dalam melakukan hal-hal yang berhubungan dengan pemeliharaan dan perawatan.
-3. Memberikan wawasan kepada masyarakat yang masih belum atau ragu-ragu mengenai pemeliharaan kendaraan listrik tersebut.
-4. Menjadikan aplikasi EV-ryday untuk menjadi wadah bertukar informasi mengenai kendaraan listrik dari segi kebutuhan hingga jasa pemeliharaan.
+Manfaat dari aplikasi EV-ryday adalah sebagai berikut:
+1. Membantu pemilik kendaraan listrik lebih mudah dalam melakukan hal-hal yang berhubungan dengan pemeliharaan dan perawatan.
+2. Memberikan wawasan kepada masyarakat yang masih belum atau ragu-ragu mengenai pemeliharaan kendaraan listrik tersebut.
+3. Menjadikan aplikasi EV-ryday untuk menjadi wadah bertukar informasi mengenai kendaraan listrik dari segi kebutuhan hingga jasa pemeliharaan.
 
 ## 👩🏻‍💻 Persona 👩🏻‍💻
 
