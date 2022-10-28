@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Registrasi Akun</title>
+{% endblock meta %}
+
+{% block content %}  
+{% if user.is_authenticated %}
+<div id="navbar"></div>
+
+<script>
+$(function() {
+  $("#navbar").load("/static/navbar_auth.html");
+});
+</script>
+
+{% else %}
+<div id="navbar"></div>
+
+<script>
+$(function() {
+  $("#navbar").load("/static/navbar.html");
+});
+</script>
+
+{% endif %}
+
+<div class = "login">
+    
+    <h2>Register</h2>  
+
+    <form method="POST" class="form-control" id="register">
+        {% csrf_token %}
+        <table style="border-radius: 10px;">
+            <table>
+                <tr>
+                    <td>Username: </td>
+                    <td><input type="text" id="username" class="form-control"></td>
+                </tr>
+                <tr>
+                    <td>Email: </td>
+                    <td><input type="text" id="email" class="form-control"></td>
+                </tr>
+                <tr>
+                    <td>Password: </td>
+                    <td><input type="password" id="password"  class="form-control"></td>
+                </tr>
+                <tr>
+                    <td>Confirm Password: </td>
+                    <td><input type="password" id="confirm-password" class="form-control"></td>
+                </tr>
+                <tr>
+                    <td>First Name: </td>
+                    <td><input type="text" id="first-name" class="form-control"></td>
+                </tr>
+                <tr>
+                    <td>Last Name: </td>
+                    <td><input type="text" id="last-name" class="form-control"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <button class="btn btn-outline-success" type="submit" value="Register">Register</button>
+                        <ul id="message"></ul>
+                    </td>
+                </tr>
+            </table>
+        </table>
+      </form>
+</div>  
+
+<script>
+    $(document).ready(function() {
+        $("#register").submit(function (e) {
+            e.preventDefault()
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            const formData = {
+                username: $('#username').val(),
+                email: $('#email').val(),
+                password1: $('#password').val(),
+                password2: $('#confirm-password').val(),
+                first_name: $('#first-name').val(),
+                last_name: $('#last-name').val(),
+            }
+            $.ajax({
+                async: true,
+                type: "POST",
+                headers: {'X-CSRFToken': csrftoken},
+                url: "/register/",
+                data: formData,
+                dataType: 'json',
+                success: function(response){
+                $("#register").each(function(){
+                    this.reset();
+                })
+                $('#message').text("Akun berhasil dibuat!")
+                },
+                error: function(response){
+                    $('#message').text("Harap dicek kembali!")
+                }
+            })
+        })
+    })
+</script>
+
+{% endblock content %}
