@@ -14,12 +14,13 @@ def main(request):
 
 def register(request):
     form = CustomUserCreationForm()
-    if request.method == 'POST':
+    if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            login(request, user)
             messages.success(request, 'Akun telah berhasil dibuat!')
-            return HttpResponseRedirect('/login/')
+            return redirect('home:main')
     context = {'form':form}
     return render(request, 'register.html', context)
 
