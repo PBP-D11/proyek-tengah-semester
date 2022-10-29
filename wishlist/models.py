@@ -10,3 +10,4 @@ class Wishlist(models.Model):
     rating = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(4)])
     review = models.TextField()
+    target_buy = models.DateField()
