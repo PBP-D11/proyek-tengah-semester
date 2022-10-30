@@ -46,8 +46,7 @@ def add_station(request):
                 alamat=alamat,
                 time_open=time_open,
                 time_close=time_close,
-                link_gmap=link_gmap,
-            )
+                link_gmap=link_gmap)
             station.save()
         return HttpResponse(b"CREATED", status=201)
     return HttpResponseNotFound()
