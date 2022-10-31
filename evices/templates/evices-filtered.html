@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+ {% block content %}
+
+ {% if user.is_authenticated %}
+<div id="navbar"></div>
+
+<script>
+$(function() {
+  $("#navbar").load("/static/navbar_auth.html");
+});
+</script>
+
+{% else %}
+<div id="navbar"></div>
+
+<script>
+$(function() {
+  $("#navbar").load("/static/navbar.html");
+});
+</script>
+{% endif %}
+
+ <div class="container">
+	<h2 style="text-align:center ;">Find Service</h2>
+	<div style="text-align:center ;">
+      	<p style="text-align:center ;">Pilih Lokasi Anda</p>
+      	<div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Lokasi yang tersedia
+          </button>
+          <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'evices:show_evices_ajax' %}">Semua Kota</a></li>
+              {% for kotaa in daftar_kota %}
+              <li><a class="dropdown-item" href="/services/{{kotaa}}/">{{kotaa}}</a></li>
+              {% endfor %}
+          </ul>
+    	</div>
+	</div>
+  	<div class="container-fluid d-flex flex-wrap justify-content-center" id="stn-card"></div>
+  	<p style="text-align:center ;">Discover new EV-Service? <a data-bs-toggle="modal" href="#addEvicesModal" id="add-stn">Click Here!</a></p>
+</div>
+  
+  <div class="modal fade" id="addEvicesModal" tabindex="-1" aria-labelledby="addEvicesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addEvicesModalLabel">Add Evices</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="form" onsubmit="return false;">
+            {% csrf_token %}  
+            <table>  
+                {{ form.as_table }}
+            </table>  
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button id="submit" type="submit" type="button" value="Submit" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+
+<div id="all_evices"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+  crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+  async function getEvices() {
+    return fetch('/services/json/{{kota}}/').then((res) => res.json())
+  }
+
+  async function refreshEvices() {
+        document.getElementById("all_evices").innerHTML = ""
+        const evices = await getEvices()
+        let htmlString = ``
+        evices.forEach((item) => {
+          htmlString += `\n<div class="card">
+          <h5 class="card-header">${item.fields.name}</h5>
+          <div class="card-body">
+            <img class="card-img-top" src=${item.fields.photo} style="width: 150px;">
+            <p class="card-text">Jam Operasional: ${item.fields.time_open}-${item.fields.time_close}</p>
+            <p class="card-text">Nomor Telepon: ${item.fields.phone}</p>
+            <p class="card-text">Alamat: ${item.fields.address}, ${item.fields.city}</p>
+            <a href=${item.fields.link_gmap} class="btn btn-primary" role="button" aria-disabled="false" target="_blank">Google Map</a>
+          </div>
+          </div>
+    
+          <br>`
+        })
+        
+        document.getElementById("all_evices").innerHTML = htmlString
+  }
+
+  function addEvices() {
+    fetch('/evices/add/', {
+          method: "POST",
+          body: new FormData(document.querySelector('#form'))
+      }).then(refreshEvices)
+    return false
+  }
+
+  document.getElementById("submit").onclick = addEvices
+  refreshEvices()
+</script>
+  
+  
+
+{% endblock content %}
