@@ -1,9 +1,11 @@
+from email.policy import default
 from django import forms  
-from .models import CustomUser  
+from .models import CustomUser, UserProfile
 from django.contrib.auth.forms import UserCreationForm  
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import UserChangeForm
 
-class CustomUserCreationForm(UserCreationForm, ): 
+class CustomUserCreationForm(UserCreationForm): 
     username = forms.CharField(label='Username', min_length=5, max_length=150)
     first_name = forms.CharField(label='First Name')
     last_name = forms.CharField(label='Last Name')
@@ -40,6 +42,7 @@ class CustomUserCreationForm(UserCreationForm, ):
             last_name=self.cleaned_data['last_name'],
             email=self.cleaned_data['email'],
             password=self.cleaned_data['password1']
+
         ) 
         return user  
 
@@ -47,3 +50,17 @@ class CustomUserCreationForm(UserCreationForm, ):
     class Meta:
         model = CustomUser
         fields = ('username','email','password1','password2','first_name','last_name')
+
+
+class UpdateUserForm(forms.ModelForm):
+    username = forms.CharField(max_length=100,
+                               required=True,
+                               widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(required=True,
+                             widget=forms.TextInput(attrs={'class': 'form-control'}))
+    
+    phone_number = forms.CharField(required=False, max_length=12)
+
+    class Meta:
+        model = CustomUser
+        fields = ['username','email','first_name','last_name','phone_number']
