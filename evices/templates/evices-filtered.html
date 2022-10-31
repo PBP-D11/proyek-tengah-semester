@@ -99,7 +99,7 @@ $(function() {
   }
 
   function addEvices() {
-    fetch('/evices/add/', {
+    fetch('add/', {
           method: "POST",
           body: new FormData(document.querySelector('#form'))
       }).then(refreshEvices)
