@@ -9,9 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core import serializers
-import json
 from django.http import JsonResponse
-from .models import UserProfile
+from .models import UserProfile, CustomUser
 
 # Create your views here.
 def _redirect(request, url):
@@ -42,6 +41,26 @@ def profile_update(request):
     else:
         return HttpResponse()
 
+def validate_username(request):
+    username = request.GET.get('username',None)
+    data = {
+        'exists' : CustomUser.objects.filter(username=username).exists()
+    }
+    return JsonResponse(data)
+
+def validate_email(request):
+    email = request.GET.get('email', None)
+    data = {
+        'exists' : CustomUser.objects.filter(email=email).exists()
+    }
+    return JsonResponse(data)
+
+def validate_phone(request):
+    phone_number = request.GET.get('phone', None)
+    data = {
+        'exists' : CustomUser.objects.filter(phone_number=phone_number).exists()
+    }
+    return JsonResponse(data)
 
 @login_required(login_url='/login/')
 def profile_json(request):
