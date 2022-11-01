@@ -1,6 +1,4 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
-from django.contrib.auth.models import User
 from home.models import CustomUser
 # Create your models here.
 
@@ -11,7 +9,7 @@ class Car(models.Model):
     is_reviewed = models.BooleanField(default=False)
     total_love = models.IntegerField(default=0)
     total_review = models.IntegerField(default=0)
-    # image = models.ImageField()
+    image = models.URLField()
 
 
 class Review(models.Model):
@@ -24,4 +22,4 @@ class Review(models.Model):
 class Wishlist(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
-    time_buy = models.DateField()
+    # time_buy = models.DateField()

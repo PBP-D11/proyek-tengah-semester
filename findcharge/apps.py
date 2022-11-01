@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class Wishlist2Config(AppConfig):
+class FindchargeConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'wishlist2'
+    name = 'findcharge'
