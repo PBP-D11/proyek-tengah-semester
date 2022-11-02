@@ -5,12 +5,13 @@ body {
     line-height: 1.8;
 }
 
-section {
-    padding-top: 80px;
-    padding-bottom: 80px;
-    z-index: 2;
-    position: relative;
-}
+.section {
+    height: 100%;  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
 .overlay {
     position: absolute;

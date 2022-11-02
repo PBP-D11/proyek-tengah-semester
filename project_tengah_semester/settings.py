@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home',
     'findcharge',
+    'news'
 ]
 
 MIDDLEWARE = [
@@ -148,3 +149,9 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 AUTH_USER_MODEL = 'home.CustomUser'
+
+# Base url to serve media files  
+MEDIA_URL = '/media/'  
+  
+# Path where media is stored  
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')  
