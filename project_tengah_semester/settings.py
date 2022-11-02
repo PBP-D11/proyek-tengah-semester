@@ -16,6 +16,10 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+MEDIA_URL = '/media/'  
+  
+# Path where media is stored  
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 PRODUCTION = os.getenv('DATABASE_URL') is not None
 
@@ -40,9 +44,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'home', 
-    'findcharge', 
+    'evices',
+    'home',
+    'findcharge',
+    'history',
     'evorumss',
+    
 ]
 
 MIDDLEWARE = [

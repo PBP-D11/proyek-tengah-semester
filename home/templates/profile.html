@@ -82,6 +82,15 @@ $(function() {
 </div>
 
 <script>
+    function ValidateEmail(input) {
+        var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        if (input.match(validRegex)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     function getDataSuccess(){
         $.get("{% url 'home:profile-json'%}", function(data){
             $('#full-name').text(data.full_name)
@@ -123,6 +132,8 @@ $(function() {
         })
     }
 
+    function isNumber(n) { return !isNaN(parseFloat(n)) && !isNaN(n - 0) }
+
     $(document).ready(function() {
         getData()
 
@@ -143,15 +154,134 @@ $(function() {
             $('#password').attr('hidden',true)
             $('#button-edit').attr('hidden',false)
             $('#username2').attr('disabled',true)
+            $('#username2').removeClass("border-success")
+            $('#username2').removeClass("border-danger")
             $('#first-name').attr('disabled',true)
+            $('#first-name').removeClass("border-success")
+            $('#first-name').removeClass("border-danger")
             $('#last-name').attr('disabled',true)
+            $('#last-name').removeClass("border-success")
+            $('#last-name').removeClass("border-danger")
             $('#phone').attr('disabled',true)
+            $('#phone').removeClass("border-success")
+            $('#phone').removeClass("border-danger")
             $('#email-edit').attr('disabled',true)
+            $('#email-edit').removeClass("border-success")
+            $('#email-edit').removeClass("border-danger")
             $('#password-input').attr('hidden',true)
             $("#profile-edit").each(function(){
             this.reset();
             })
             getData()
+        })
+
+        $("#email-edit").change(function(){
+            if(!$(this).val()){
+                $('#message').attr('hidden',true)
+                $('#email-edit').removeClass("border-danger")
+                $('#email-edit').removeClass("border-success")
+            } else{
+                if(ValidateEmail($(this).val())){
+                    $.ajax({
+                        url : '/validate-email/',
+                        data : {'email' : $(this).val()},
+                        type : 'GET',
+                        dataType : 'json',
+                        success: function(data){
+                            if(data.exists){
+                                $('#message').attr('hidden',false)
+                                $('#message-label').text("Email already been used")
+                                $('#email-edit').addClass("border-danger")
+                            } else {
+                                $('#message').attr('hidden',true)
+                                $('#message-label').text("")
+                                $('#email-edit').removeClass("border-danger")
+                                $('#email-edit').addClass("border-success")
+                            }
+                        }
+                    })
+                } else{
+                    $('#message').attr('hidden',false)
+                    $('#message-label').text("Email invalid")
+                    $('#email-edit').addClass("border-danger")
+                }
+            }
+        })
+
+        $("#first-name").change(function(){
+            if(!$(this).val()){
+                $('#first-name').removeClass("border-success")
+            } else {
+                $('#first-name').addClass("border-success")
+            }
+        })
+
+        $("#last-name").change(function(){
+            if(!$(this).val()){
+                $('#last-name').removeClass("border-success")
+            } else {
+                $('#last-name').addClass("border-success")
+            }
+        })
+
+        $("#phone").change(function(){
+            if(!$(this).val()){
+                $('#message').attr('hidden',true)
+                $('#phone').removeClass("border-danger")
+                $('#phone').removeClass("border-success")
+            } else{
+                if(isNumber($(this).val()) && $(this).val().length <= 12){
+                    $.ajax({
+                        url : '/validate-phone/',
+                        data : {'phone' : $(this).val()},
+                        type : 'GET',
+                        dataType : 'json',
+                        success: function(data){
+                            if(data.exists){
+                                $('#message').attr('hidden',false)
+                                $('#message-label').text("Phone number already been registered")
+                                $('#phone').addClass("border-danger")
+                            } else {
+                                $('#message').attr('hidden',true)
+                                $('#message-label').text("")
+                                $('#phone').removeClass("border-danger")
+                                $('#phone').addClass("border-success")
+                            }
+                        }
+                    })
+                } else{
+                    $('#message').attr('hidden',false)
+                    $('#message-label').text("Phone number invalid")
+                    $('#phone').addClass("border-danger")
+                }
+            }
+        })
+
+        $("#username2").change(function(){
+            if(!$(this).val()){
+                $('#message').attr('hidden',true)
+                $('#username2').removeClass("border-danger")
+                $('#username2').removeClass("border-success")
+            } else{
+                $.ajax({
+                    url : '/validate-username/',
+                    data : {'username' : $(this).val()},
+                    type : 'GET',
+                    dataType : 'json',
+                    success: function(data){
+                        if(data.exists){
+                            $('#message').attr('hidden',false)
+                            $('#message-label').text("Username already exists")
+                            $('#username2').addClass("border-danger")
+                        } else {
+                            $('#message').attr('hidden',true)
+                            $('#message-label').text("")
+                            $('#username2').removeClass("border-danger")
+                            $('#username2').addClass("border-success")
+                        }
+                    }
+                })
+            }
         })
 
         $("#save").click(function(e) {
@@ -204,15 +334,19 @@ $(function() {
                     data: formData,
                     dataType: 'json',
                     success: function(response){
-                        console.log(response)
                         $('#button-save').attr('hidden',true)
                         $('#password').attr('hidden',true)
                         $('#button-edit').attr('hidden',false)
                         $('#username2').attr('disabled',true)
+                        $('#username2').removeClass("border-success")
                         $('#first-name').attr('disabled',true)
+                        $('#first-name').removeClass("border-success")
                         $('#last-name').attr('disabled',true)
+                        $('#last-name').removeClass("border-success")
                         $('#phone').attr('disabled',true)
+                        $('#phone').removeClass("border-success")
                         $('#email-edit').attr('disabled',true)
+                        $('#email-edit').removeClass("border-success")
                         $('#password').attr('hidden',true)
                         $("#profile-edit").each(function(){
                             this.reset();
@@ -221,7 +355,6 @@ $(function() {
                         getDataSuccess()
                     },
                     error: function(response){
-                        console.log(response)
                         $('#message').attr('hidden',false)
                         $('#message-label').text(response.responseJSON['error'])
                     }
