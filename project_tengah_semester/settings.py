@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'home',
     'findcharge',
     'wishlist',
+    'evishlist',
 ]
 
 MIDDLEWARE = [

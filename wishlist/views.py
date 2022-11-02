@@ -16,54 +16,54 @@ import datetime
 from wishlist.models import *
 
 
-@login_required(login_url='/account/login/')
-@csrf_exempt
 def create_car_ajax(request):
-    if request.method == 'POST':
-        form = CarForm(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data.get('name')
-            price = form.cleaned_data.get('price')
-            target_buy = form.cleaned_data.get('target_buy')
-            photo = form.cleaned_data.get('photo')
-            car = Car.objects.create(
-                name=name, price=price, picture=photo, target_buy=target_buy,  user=request.user)
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = CarForm(request.POST)
+            if form.is_valid():
+                name = form.cleaned_data.get('name')
+                price = form.cleaned_data.get('price')
+                link_buy = form.cleaned_data.get('link_buy')
+                photo = form.cleaned_data.get('photo')
+                car = Car.objects.create(
+                    name=name, price=price,  user=request.user, link_buy=link_buy, photo=photo)
 
-            car.save()
-            context = {
-                'pk': car.pk,
-                'fields': {
-                    'name': car.name,
-                    'price': car.price,
-                    'photo': car.photo,
-                    # 'link_buy': link_buy,
-                    'car': car
+                car.save()
+                context = {
+                    'pk': car.pk,
+                    'fields': {
+                        'name': car.name,
+                        'price': car.price,
+                        'photo': car.photo,
+                        'link_buy': link_buy,
+                        'car': car
+                    }
                 }
-            }
-            return JsonResponse(context)
-        return JsonResponse({'error': True})
+                return JsonResponse(context)
+            return JsonResponse({'error': True})
 
 
-@login_required(login_url='/account/login/')
-@csrf_exempt
 def delete_car_ajax(request, id):
-    if (request.method == 'DELETE'):
-        Car.objects.filter(id=id).delete()
-        return HttpResponse(status=202)
+    if request.user.is_authenticated:
+        if (request.method == 'DELETE'):
+            Car.objects.filter(id=id).delete()
+            return HttpResponse(status=202)
 
 
-@login_required(login_url='/account/login/')
 def show_json_car(request):
-    data_car = Car.objects.filter(user=request.user)
-    return HttpResponse(serializers.serialize("json", data_car), content_type="application/json")
+    if request.user.is_authenticated:
+        data_car = Car.objects.all()
+        return HttpResponse(serializers.serialize("json", data_car), content_type="application/json")
 
 
-@login_required(login_url='/account/login/')
 def show_car(request):
-    modelCar = Car.objects.all()
-    form = CarForm()
-    context = {
-        'data': modelCar,
-        'form': form,
-    }
-    return render(request, 'wishlist.html', context)
+    print("HELLO")
+    if request.user.is_authenticated:
+        modelCar = Car.objects.filter(user=request.user)
+        form = CarForm()
+        context = {
+            'data': modelCar,
+            'form': form,
+        }
+        return render(request, 'wishlist.html', context)
+    return render(request, 'index.html')

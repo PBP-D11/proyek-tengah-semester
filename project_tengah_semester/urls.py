@@ -21,4 +21,6 @@ urlpatterns = [
     path('services/', include('evices.urls')),
     path('', include('home.urls')),
     path('find-charge/', include('findcharge.urls')),
-    path('wishlist/', include('wishlist.urls'))]
+    path('wishlist/', include('wishlist.urls')),
+    # path('evishlist/', include('evishlist.urls'))
+]

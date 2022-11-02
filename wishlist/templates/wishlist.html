@@ -36,8 +36,8 @@
         $.post(  "/wishlist/create-ajax/",{
           name:$("#name").val(),
           price:$("#price").val(),
-          target_buy:$("#name").val(),
-          name:$("#name").val(),
+          // target_buy:$("#name").val(),
+          // name:$("#name").val(),
         },
         function(data,status){
           console.log("risa")
@@ -79,7 +79,7 @@
     <!-- LOGIN ? HALLO NAMA | HALLO -->
     <button id="tambahMobil" class="btn bg-abu-tua hover:bg-abu-muda text-white" data-bs-toggle="modal" data-bs-target="#modalTambah">Tambah Mobil</button>
     <button id="lihatWishlist" class="btn bg-abu-tua hover:bg-abu-muda text-white" data-bs-toggle="modal" data-bs-target="#myWishlistPage">Lihat Wishlist</button>
-    <div class = "grid md:grid-cols-2 lg:grid-cols-3 w-full gap-5 mt-8 sm:mt-5" id = "diarybund"></div>
+    <div class = "grid md:grid-cols-2 lg:grid-cols-3 w-full gap-5 mt-8 sm:mt-5" id = "wishlist"></div>
   </div>
 
   <!-- Modal Tambah Mobil -->
