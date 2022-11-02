@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'evices',
     'home',
     'findcharge',
+    'history'
 ]
 
 MIDDLEWARE = [
