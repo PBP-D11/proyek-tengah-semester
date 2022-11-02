@@ -96,48 +96,4 @@ $(function() {
 
 </body>
 
-
 {% endblock content %}
-<!-- <script>
-  async function getData(){
-    return fetch("{% url 'findcharge:show_json' %}").then((res) => res.json())
-  }
-
-  async function refresh(){
-    const station = await getData()
-    let htmlString = ""
-    document.getElementById("stn-card").innerHTML = htmlString
-    station.forEach(element => {
-        htmlString += `<div class="card text-bg-light m-3" style="width:20rem">
-                            <h5 class="card-header">${element.fields.nama_station}</h5>
-                            <div class="card-body">
-                                <p class="card-text">${element.fields.time_open}-${element.fields.time_close}</p>
-                                <p class="card-text">${element.fields.alamat}</p>
-                                    <div>
-                                        <a href=${element.fields.link_gmap} class="btn btn-primary" role="button" aria-disabled="false" target="_blank">Google Map</a>
-                                        <button type="button" class="btn btn-success">Check In</button>
-                                        
-                                    </div>
-
-                            </div>
-                            <div class="card-footer">
-                                <p>${element.fields.kota}</p>
-                            </div>
-                        </div>
-                        <br>`                    
-    });
-    document.getElementById("stn-card").innerHTML = htmlString
-  }
-
-  function addStation(){
-    fetch("{% url 'findcharge:add_station' %}", {
-        method: "POST",
-        body: new FormData(document.querySelector("#stn-form"))
-    }).then(refresh)
-    document.getElementById("stn-form").reset()
-    return false
-  }
-
-  document.getElementById("button-add").onclick = addStation
-  refresh()
-</script> -->
