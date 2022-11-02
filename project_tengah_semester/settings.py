@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'evices',
     'home',
     'findcharge',
-    'history'
+    'history',
     'news'
 ]
 

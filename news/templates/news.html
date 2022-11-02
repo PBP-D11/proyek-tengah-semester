@@ -32,7 +32,7 @@ $(function() {
         <p>Disini, kamu dapat melihat berita terbaru mengenai EV.</p>
         <div class="stn-card"></div>
         <div class="container-fluid d-flex flex-wrap justify-content-center" id="stn-card"></div>
-        <p style="text-align:center ;">Change news country? <a data-bs-toggle="modal" href="#myModal">Click Here!</a></p>
+        <p style="text-align:center ;">Ingin tambah kanal berita? <a data-bs-toggle="modal" href="#myModal">Klik Disini!</a></p>
         </div>
         <div class="modal" id="myModal">
             <div class="modal-dialog">
@@ -40,7 +40,7 @@ $(function() {
 
                     <!-- Modal Header -->
                     <div class="modal-header">
-                        <h4 class="modal-title">Select Country</h4>
+                        <h4 class="modal-title">Select Source</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
@@ -48,18 +48,19 @@ $(function() {
                     <form id="news-form" method="POST" action="">
                         {% csrf_token %}
                         <div class="modal-body">
-                            <label for="location">Pilih lokasi:</label>
-                            <select id="location" name="location">
-                                <option value="volvo">Indonesia</option>
-                                <option value="saab">Malaysia</option>
-                                <option value="mercedes">Amerika Serikat</option>
-                                <option value="audi">Semua Negara</option>
+                            <label for="source">Pilih Kanal Berita:</label>
+                            <select id="source" name="source">
+                                <option value="engadget">Engadget</option>
+                                <option value="the-verge">The Verge</option>
+                                <option value="techcrunch">Techcrunch</option>
+                                <option value="bbc-news">BBC News</option>
+                                <option value="cnn">CNN</option>
                               </select>
                             </div>
                             
                             <!-- Modal footer -->
                             <div class="modal-footer">
-                                <button type="submit" id="button-add" class="btn btn-success" data-bs-dismiss="modal" >Submit</button> 
+                                <button type="submit" id="button-add" class="btn btn-success" data-bs-dismiss="modal" ><a href="/news/">Submit</a></button> 
                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
@@ -90,61 +91,25 @@ $(function() {
     </section>
   </body>
 
-  <div class="container">
-    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <div class="col-md-4 d-flex align-items-center">
-        <span class="text-muted">&copy; 2022 - Kelompok D-11</span>
-        </div>
-    </footer>
-  </div>
-
   <script>
     $(document).ready(function(){
-        $('#news-form').submit(function(){
-            
+        $('#news-form').submit(function(e){
+            e.preventDefault()
+            var source = $('#source').val()
+            $.ajax({
+                async: true,
+                type: 'POST',
+                url: 'add/',
+                data: {
+                    'source': source,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(){
+                    alert.message('Success')
+                }
+            })
         })
     })
+
   </script>
-  <!-- <script>
-    async function getData(){
-      return fetch("{% url 'news:show_json' %}").then((res) => res.json())
-    }
-  
-    async function refresh(){
-      var station = await getData()
-      let htmlString = ""
-      document.getElementById("stn-card").innerHTML = htmlString
-      station.forEach(element => {
-          htmlString += `<div class="card text-bg-light m-3" style="width:20rem">
-                              <h5 class="card-header">${element.fields.nama_station}</h5>
-                              <div class="card-body">
-                                  <p class="card-text">${element.fields.time_open}-${element.fields.time_close}</p>
-                                  <p class="card-text">${element.fields.alamat}</p>
-                                      <div>
-                                          <a href=${element.fields.link_gmap} class="btn btn-primary" role="button" aria-disabled="false" target="_blank">Google Map</a>
-                                          <button type="button" class="btn btn-success">Check In</button>
-                                          
-                                      </div>
-                              </div>
-                              <div class="card-footer">
-                                  <p>${element.fields.kota}</p>
-                              </div>
-                          </div>
-                          <br>`                    
-      });
-      document.getElementById("stn-card").innerHTML = htmlString
-    }
-  
-    function addNews(){
-      fetch("{% url 'news:add_news' %}", {
-          method: "POST",
-          body: new FormData(document.querySelector("#stn-form"))
-      }).then(refresh())
-      document.getElementById("stn-form").reset()
-      return false
-    }
-  
-    document.getElementById("button-add").onclick = addNews
-    refresh()
-  </script> -->
   {% endblock content %}
