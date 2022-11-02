@@ -30,24 +30,28 @@ def show_filtered_station(request, kota):
     return render(request, "find-charge-filtered.html", {'form':InputForm(), 'daftar_kota':daftar_kota})
 
 def add_station(request):
-    form = InputForm()
-    if request.method == "POST":
+    if request.method == 'POST':
         form = InputForm(request.POST)
         if form.is_valid():
-            nama_station = request.POST["nama_station"]
-            kota = request.POST["kota"].capitalize()
-            alamat = request.POST["alamat"]
-            time_open = request.POST["time_open"]
-            time_close = request.POST["time_close"]
-            link_gmap = request.POST["link_gmap"]
-            station = ChargingStation(
-                nama_station=nama_station,
-                kota=kota,
-                alamat=alamat,
-                time_open=time_open,
-                time_close=time_close,
-                link_gmap=link_gmap)
-            station.save()
-        return HttpResponse(b"CREATED", status=201)
+            data = form.cleaned_data
+            nama_station = data["nama_station"]
+            kota = data["kota"]
+            alamat = data["alamat"]
+            jam_buka = data["time_open"]
+            jam_tutup = data["time_close"]
+            link_gmap = data["link_gmap"]
+
+            new_station = ChargingStation(nama_station=nama_station, \
+                kota=kota, alamat=alamat, time_open=jam_buka, \
+                    time_close=jam_tutup, link_gmap=link_gmap)
+            
+            new_station.save()
+
+            station_obj = ChargingStation.objects.filter(pk=new_station.pk)
+
+            station_json = serializers.serialize('json', station_obj)
+
+        return HttpResponse(station_json, content_type="application/json")
+
     return HttpResponseNotFound()
 

@@ -25,66 +25,86 @@ $(function() {
 </script>
 {% endif %}
 
-<div class="container">
-  <h2 style="text-align:center ;">Find Charge</h2>
-  <div style="text-align:center ;">
-      <p style="text-align:center ;">Pilih Lokasi Anda</p>
-      <div class="dropdown">
-          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Lokasi yang tersedia
-          </button>
-          <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="{% url 'findcharge:show_station' %}">Semua Kota</a></li>
-              {% for kota in daftar_kota %}
-              <li><a class="dropdown-item" href="/find-charge/{{kota}}/">{{kota}}</a></li>
-              {% endfor %}
-          </ul>
-        </div>
+<script src="{% static 'findcharge/findCharge.js' %}"></script>
+<body>
+  <div class="container">
+    <h2 style="text-align:center ;">Find Charge</h2>
+    <div style="text-align:center ;">
+        <p style="text-align:center ;">Select your location</p>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Available location
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'findcharge:show_station' %}">Semua Kota</a></li>
+                {% for kota in daftar_kota %}
+                <li><a class="dropdown-item" href="{% url 'findcharge:show_filtered_station' kota %}">{{kota}}</a></li>
+                {% endfor %}
+            </ul>
+          </div>
+    </div>
+    <div class="stn-card"></div>
+    <div class="container-fluid d-flex flex-wrap justify-content-center" id="stn-card"></div>
+    <p style="text-align:center ;">Discover new charging station? <a data-bs-toggle="modal" href="#myModal">Click Here!</a></p>
   </div>
-  <div class="stn-card"></div>
-  <div class="container-fluid d-flex flex-wrap justify-content-center" id="stn-card"></div>
-  <p style="text-align:center ;">Discover new charging station? <a data-bs-toggle="modal" href="#myModal">Click Here!</a></p>
-</div>
-{% csrf_token %}
-<div class="modal" id="myModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
 
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Add New Charging Station</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Add New Charging Station</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+            <form method="POST" id="stn-form">
+                {% csrf_token %}
+                <table>
+                    {{form.as_table}}
+                </table>
+              </div>
+              
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="submit" id="button-add" class="btn btn-success" data-bs-dismiss="modal" value="submit">Submit</button> 
+              </form>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        </div>
+
       </div>
-
-      <!-- Modal body -->
-      <div class="modal-body">
-          <form id="stn-form" onsubmit="return false">
-              {% csrf_token %}
-              <table>
-                  {{form.as_table}}
-              </table>
-          </form>
-      </div>
-
-      <!-- Modal footer -->
-      <div class="modal-footer">
-          <button type="button" id="button-add" class="btn btn-success" data-bs-dismiss="modal" >Submit</button> 
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-      </div>
-
     </div>
   </div>
-</div>
+  <!-- Modal -->
+  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="SuccessModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="SuccessModalLabel">Success!</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>You have been checked in successfully!</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 
-<script>
+
+{% endblock content %}
+<!-- <script>
   async function getData(){
     return fetch("{% url 'findcharge:show_json' %}").then((res) => res.json())
   }
 
   async function refresh(){
-    var station = await getData()
+    const station = await getData()
     let htmlString = ""
     document.getElementById("stn-card").innerHTML = htmlString
     station.forEach(element => {
@@ -113,12 +133,11 @@ $(function() {
     fetch("{% url 'findcharge:add_station' %}", {
         method: "POST",
         body: new FormData(document.querySelector("#stn-form"))
-    }).then(refresh())
+    }).then(refresh)
     document.getElementById("stn-form").reset()
     return false
   }
 
   document.getElementById("button-add").onclick = addStation
   refresh()
-</script>
-{% endblock content %}
+</script> -->
