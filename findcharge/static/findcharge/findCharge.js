@@ -1,4 +1,7 @@
 $(document).ready(function() {
+  $("#btn-history").click(function(){
+    alert("yoi");
+  });
   // Get data from json and append
   $.ajax({
       url: `/find-charge/json`,
@@ -65,10 +68,17 @@ $(document).ready(function() {
       })
       $("#stn-form").trigger('reset')
   })
+
 })
+
+let isLoggedIn = window.user
 
 // Add history
 function addHistory(pk) {
-  fetch(`/find-charge/checkin/${pk}`)
-  return false
+  if (isLoggedIn != "None") {
+    fetch(`/find-charge/checkin/${pk}`)
+    return false
+  }else {
+    location.replace("/login/")
+  }
 }

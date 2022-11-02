@@ -69,8 +69,14 @@ $(document).ready(function() {
     })
 })
 
-// Add history 
+let isLoggedIn = window.user
+
+// Add history
 function addHistory(pk) {
-  fetch(`/find-charge/checkin/${pk}`)
-  return false
+  if (isLoggedIn != "None") {
+    fetch(`/find-charge/checkin/${pk}`)
+    return false
+  }else {
+    location.replace("/login/")
+  }
 }
