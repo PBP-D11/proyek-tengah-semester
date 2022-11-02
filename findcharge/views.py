@@ -19,7 +19,7 @@ def show_station(request):
     if (request.user.is_authenticated):
         user = request.user
     else:
-        user = None
+        user = ""
 
     station = ChargingStation.objects.all()
     daftar_kota = set()
@@ -32,7 +32,7 @@ def show_filtered_station(request, kota):
     if (request.user.is_authenticated):
         user = request.user
     else:
-        user = None
+        user = ""
 
     station = ChargingStation.objects.filter(kota=kota)
     all_station = ChargingStation.objects.all()

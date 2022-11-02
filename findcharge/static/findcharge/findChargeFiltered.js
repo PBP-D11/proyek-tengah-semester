@@ -73,7 +73,7 @@ let isLoggedIn = window.user
 
 // Add history
 function addHistory(pk) {
-  if (isLoggedIn != "None") {
+  if (isLoggedIn.length > 0) {
     fetch(`/find-charge/checkin/${pk}`)
     return false
   }else {
