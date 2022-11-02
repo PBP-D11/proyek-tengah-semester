@@ -18,13 +18,16 @@ from django.urls import path, include
 from django.conf import settings  
 from django.conf.urls.static import static  
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('services/', include('evices.urls')),
     path('', include('home.urls')),
     path('find-charge/', include('findcharge.urls')),
-    path('news/', include('news.urls'))
+    path('news/', include('news.urls')),
+    path('evorums/', include('evorumss.urls'))
 ]
 
 if settings.DEBUG:  
         urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)  
+# path('services/', include('evices.urls')),

@@ -28,8 +28,8 @@ $(function() {
 <script>
   let kota = window.location.pathname.split("/")[2]
   window.jsonUrl = `/find-charge/json/${kota}`
+  window.user = "{{user}}"
 </script>
-
 <script src="{% static 'findcharge/findChargeFiltered.js' %}"></script>
 <body>
   <div class="container">

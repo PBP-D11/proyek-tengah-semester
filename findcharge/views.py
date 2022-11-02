@@ -16,21 +16,31 @@ def show_json_filtered(request, kota):
     return HttpResponse(serializers.serialize("json", station), content_type="application/json")
 
 def show_station(request):
+    if (request.user.is_authenticated):
+        user = request.user
+    else:
+        user = ""
+
     station = ChargingStation.objects.all()
     daftar_kota = set()
 
     for data in station:
         daftar_kota.add(data.kota)
-    return render(request, "find-charge.html", {'form':InputForm(), 'daftar_kota':daftar_kota})
+    return render(request, "find-charge.html", {'form':InputForm(), 'daftar_kota':daftar_kota, 'user':user})
 
 def show_filtered_station(request, kota):
+    if (request.user.is_authenticated):
+        user = request.user
+    else:
+        user = ""
+
     station = ChargingStation.objects.filter(kota=kota)
     all_station = ChargingStation.objects.all()
     daftar_kota = set()
 
     for data in all_station:
         daftar_kota.add(data.kota)
-    return render(request, "find-charge-filtered.html", {'form':InputForm(), 'daftar_kota':daftar_kota})
+    return render(request, "find-charge-filtered.html", {'form':InputForm(), 'daftar_kota':daftar_kota, 'user':user})
 
 def add_station(request):
     if request.method == 'POST':
