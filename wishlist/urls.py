@@ -5,7 +5,7 @@ app_name = 'wishlist'
 
 urlpatterns = [
     # path('', show_wishlist, name='show_wishlist'),
-    path('', show_car, name="show_catalog"),
+    path('', show_car, name="show_car"),
     path('json/', show_json_car, name="json_car"),
     # path('json2/', json_review, name="json_review"),
     path('create-ajax/', create_car_ajax, name="create_car_ajax"),

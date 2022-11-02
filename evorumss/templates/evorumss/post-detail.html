@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+
+{% load static %}
+{% block meta %}
+
+<link rel="stylesheet" href="{% static 'css/global.css' %}">
+
+{% endblock meta %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div id="navbar"></div>
+
+<script>
+$(function() {
+  $("#navbar").load("/static/navbar_auth.html");
+});
+</script>
+
+{% else %}
+<div id="navbar"></div>
+
+<script>
+$(function() {
+  $("#navbar").load("/static/navbar.html");
+});
+</script>
+{% endif %}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Edit your post</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <form id="form">
+            {% csrf_token %}
+            <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Title:</label>
+            <input type="text" class="form-control" id="field_title" name="title">
+            </div>
+            <div class="mb-3">
+            <label for="message-text" class="col-form-label">Body:</label>
+            <textarea class="form-control" id="field_desc" name="body"></textarea>
+            </div>
+        </form>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="editpost" data-bs-dismiss="modal">Edit</button>
+        </div>
+    </div>
+    </div>
+</div>
+
+    <div class="row">
+        <div class="col-4 offset-4 mt-5">
+                <h1 id="header">{{ object.title }}</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        
+        {% if object.author == user %}
+            <div class="col-4 offset-4">
+                <!-- <button type="button" class="btn btn-primary" id="editpost" data-bs-toggle="modal" data-bs-target="#exampleModal">edit</button> -->
+                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'evorumss:post-update' object.id %}">Update</a>
+                <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'evorumss:post-delete' object.id %}">delete</a>
+            </div>
+        {% endif %}
+
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-1 offset-4 ">
+
+        </div>
+
+        <div class="col-3 align-self-center">
+            <h4>{{ object.body }}<h4>
+        </div>
+    </div>
+
+    <div class="col-4 offset-4 mt-2">
+        <hr class="mt-5">
+    </div>
+
+    <div class="card mx-auto border-gold shadow-lg bg-sand" style = "width: 40rem;">
+        <div class="card-body">
+            {% for comment in comments %}
+                <div class="row mx-auto mt-4 mb-4" style = "width: 34rem;" >
+                    <div class="col-4 text-right">
+                        <h4>{{ comment.author.username }} :<h4>
+                    </div>
+                    <div class="col-8">
+                        <h5>{{ comment.body }}<h5>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        
+
+        <div class="col-2 offset-5 mt-5">
+            <form method="POST">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    {{ form }}
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById("div_id_author").style.display="none"
+        document.getElementById("div_id_post").style.display="none"
+        document.getElementById("div_id_body").getElementsByTagName('label')[0].style.display="none"
+
+    $(document).ready(() => {
+      $("#editpost").click(editpost)
+      getDataDefault()
+    })
+
+    function editpost(id) {
+      $.ajax({
+        type: 'POST',
+        url: '/post-create/'+ "{{ object.id }}",
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        },
+        success: () => {
+          $("#"+id).remove()
+          $("#cardStatus"+id)[0].innerHTML = "Berhasil"
+        }
+        });
+    }
+    </script>
+{% endblock content %} 
+
+
+
+ <!-- <a href="{% url 'profile' username=object.author.profile.user.username %}">
+                <img class="rounded-circle account-img thumbpic" src="{{ object.author.profile.image.url }}" height="50">
+            </a> -->
+
+
+<!-- <a href="{% url 'profile' username=comment.author.profile.user.username %}">
+        <img class="rounded-circle account-img thumbpic" src="{{ comment.author.profile.image.url }}" height="50">
+    </a> -->
+
+<!-- <div class="col-1 offset-4 ">
+            <img class="rounded-circle account-img thumbpic" src="{{ user.profile.image.url }}" height="50">
+        </div> -->

@@ -12,7 +12,6 @@ from wishlist.models import *
 from home.models import CustomUser
 from django.views.decorators.csrf import csrf_exempt
 from wishlist.forms import *
-import datetime
 from wishlist.models import *
 
 
@@ -52,12 +51,11 @@ def delete_car_ajax(request, id):
 
 def show_json_car(request):
     if request.user.is_authenticated:
-        data_car = Car.objects.all()
+        data_car = Car.objects.filter(user=request.user)
         return HttpResponse(serializers.serialize("json", data_car), content_type="application/json")
 
 
 def show_car(request):
-    print("HELLO")
     if request.user.is_authenticated:
         modelCar = Car.objects.filter(user=request.user)
         form = CarForm()
