@@ -32,7 +32,6 @@ def show_filtered_station(request, kota):
         daftar_kota.add(data.kota)
     return render(request, "find-charge-filtered.html", {'form':InputForm(), 'daftar_kota':daftar_kota})
 
-@login_required(login_url='/home/login')
 def add_station(request):
     if request.method == 'POST':
         form = InputForm(request.POST)
@@ -59,7 +58,7 @@ def add_station(request):
 
     return HttpResponseNotFound()
 
-@login_required(login_url='/home/login')
+@login_required(login_url='/login/')
 def add_history(request, pk):
     charging_station = ChargingStation.objects.get(pk=pk)
     user = request.user
