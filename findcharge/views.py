@@ -32,6 +32,7 @@ def show_filtered_station(request, kota):
         daftar_kota.add(data.kota)
     return render(request, "find-charge-filtered.html", {'form':InputForm(), 'daftar_kota':daftar_kota})
 
+@login_required(login_url='/home/login')
 def add_station(request):
     if request.method == 'POST':
         form = InputForm(request.POST)
