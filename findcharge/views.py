@@ -3,6 +3,9 @@ from django.shortcuts import render
 from django.core import serializers
 from findcharge.forms import InputForm
 from findcharge.models import ChargingStation
+from django.contrib.auth.decorators import login_required
+from history.models import History
+
 
 def show_json(request):
     station = ChargingStation.objects.all()
@@ -55,3 +58,15 @@ def add_station(request):
 
     return HttpResponseNotFound()
 
+@login_required(login_url='/home/login')
+def add_history(request, pk):
+    charging_station = ChargingStation.objects.get(pk=pk)
+    user = request.user
+    
+    new_history = History(charging_station=charging_station, user=user)
+    new_history.save()
+
+    history_obj = History.objects.filter(pk=new_history.pk)
+    history_json = serializers.serialize('json', history_obj)
+
+    return HttpResponse(history_json, content_type="application/json")
