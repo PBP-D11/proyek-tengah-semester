@@ -47,7 +47,9 @@ INSTALLED_APPS = [
     'evices',
     'home',
     'findcharge',
-    'history'
+    'history',
+    'evorumss',
+    
 ]
 
 MIDDLEWARE = [
@@ -161,3 +163,20 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 
 SESSION_COOKIE_SECURE = True
+
+# # Static files (CSS, JavaScript, Images)
+# # https://docs.djangoproject.com/en/2.2/howto/static-files/
+
+# STATIC_URL = '/static/'
+
+# # Crispy forms
+
+# CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# # User settings
+
+# LOGIN_REDIRECT_URL = 'forum-index'
+# LOGIN_URL = 'login'
+
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
