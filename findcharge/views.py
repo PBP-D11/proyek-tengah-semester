@@ -58,7 +58,7 @@ def add_station(request):
 
     return HttpResponseNotFound()
 
-@login_required(login_url='/home/login')
+@login_required(login_url='/login/')
 def add_history(request, pk):
     charging_station = ChargingStation.objects.get(pk=pk)
     user = request.user
