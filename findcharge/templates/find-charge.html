@@ -24,7 +24,9 @@ $(function() {
 });
 </script>
 {% endif %}
-
+<script>
+  window.user = "{{user}}"
+</script>
 <script src="{% static 'findcharge/findCharge.js' %}"></script>
 <body>
   <div class="container">
@@ -47,7 +49,7 @@ $(function() {
     <div class="container-fluid d-flex flex-wrap justify-content-center" id="stn-card"></div>
     <p style="text-align:center ;">Discover new charging station? <a data-bs-toggle="modal" href="#myModal">Click Here!</a></p>
   </div>
-  <div class="modal" id="myModal">
+  <div class="modal" id="myModal" name="tes">
     <div class="modal-dialog">
       <div class="modal-content">
 
