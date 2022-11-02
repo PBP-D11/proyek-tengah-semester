@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Catalog Of Your Wishlist</title>
+{% endblock meta %}
+
+{% block content %}
+<head>
+    <div class="bg-gray relative h-full w-screen flex flex-col justify-center mt-0 items-center">
+        <h1 class="text-6xl mb-4 ">❤️</h1>
+        <center><h1 class="text-4xl "> MY WISHLIST </h1></center>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <!-- Link for JavaScript function -->
+      <script src="{% static 'js/wishlist_logic.js' %}"></script>
+     
+</head>
+
+<div>
+</div>
+<center><h1> MY WISHLIST </h1></center>
+
+<table>
+    <tr>
+    <th>Nama Barang</th>
+    <th>Harga Barang</th>
+    <th>Deskripsi</th>
+    </tr>
+    {% comment %} Tambahkan data di bawah baris ini {% endcomment %}
+</table>
+
+{% endblock content %}

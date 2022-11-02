@@ -44,6 +44,14 @@ $(function() {
             </tr>
         </table>
     </form>
+
+    {% if messages %}  
+        <ul>   
+            {% for message in messages %}  
+                <li>{{ message }}</li>  
+                {% endfor %}  
+        </ul>   
+    {% endif %}
         
     Belum mempunyai akun? <a href="{% url 'home:register' %}">Buat Akun</a>
 </div>
