@@ -1,0 +1,367 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Profile</title>
+{% endblock meta %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div id="navbar"></div>
+
+<script>
+$(function() {
+  $("#navbar").load("/static/navbar_auth.html");
+});
+</script>
+
+{% else %}
+<div id="navbar"></div>
+
+<script>
+$(function() {
+  $("#navbar").load("/static/navbar.html");
+});
+</script>
+
+{% endif %}
+
+<div class="container rounded bg-white mt-2 mb-2">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5 border border-secondary mb-2" width="150px" alt="default profile picture" src="https://static.vecteezy.com/system/resources/thumbnails/002/534/006/small/social-media-chatting-online-blank-profile-picture-head-and-body-icon-people-standing-icon-grey-background-free-vector.jpg">
+                <span class="font-weight-bold" id="full-name"></span>
+                <span class="text-black-50" id="username1"></span>
+                <span class="fw-light" id="contributor"></span>
+            </div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <form method="POST" class="form-control" id="profile-edit">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h4 class="text-right">Profile</h4>
+                    </div>
+                    <div class="row mt-2" id="message" hidden="true">
+                        <span id="message-label">Halo</span>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12"><label class="labels">Username</label><input type="text" aria-labelledby="username" class="form-control" placeholder="" value="" id="username2" disabled="true"></div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6"><label class="labels">First Name</label><input type="text" aria-labelledby="first-name" class="form-control" placeholder="" value="" id="first-name" disabled="true"></div>
+                        <div class="col-md-6"><label class="labels">Last Name</label><input type="text" aria-labelledby="last-name" class="form-control" value="" placeholder="" id="last-name" disabled="true"></div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text" aria-labelledby="phone" class="form-control" placeholder="" value="" id="phone" disabled="true"></div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12"><label class="labels">Email</label><input type="text" aria-labelledby="email" class="form-control" placeholder="" value="" id="email-edit" disabled="true"></div>
+                    </div>
+                    <div class="row mt-2" id="password-input" hidden="true">
+                        <div class="col-md-12"><label class="labels">Confirm Password</label><input type="password" aria-labelledby="password" class="form-control" placeholder="" value="" id="password"></div>
+                    </div>
+                    <div class="mt-3 text-center mb-2" id="button-save" hidden="true">
+                        <button class="btn btn-primary profile-button" type="submit" id="save">Save Profile</button>
+                        <button type="button" class="btn btn-secondary btn-cancel" id="cancel">Cancel</button>
+                    </div>
+                    <div class="mt-3 text-center mb-2" id="button-edit">
+                        <button class="btn btn-primary profile-button" type="button" id="edit">Edit Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 py-5">
+                <button class="btn btn-light btn-outline-dark d-flex justify-content-between align-items-center experience"><a a class="nav-link active" aria-current="page" href="/logout/">History Charging</a></button><br>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<script>
+    function ValidateEmail(input) {
+        var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        if (input.match(validRegex)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function getDataSuccess(){
+        $.get("{% url 'home:profile-json'%}", function(data){
+            $('#full-name').text(data.full_name)
+            $('#username1').text(data.username)
+            $('#message').attr('hidden',false)
+            if(data.contributor == true){
+                $('#contributor').text('Contributor')
+            } else{
+                $('#contributor').text('User')
+            }
+            $('#username2').attr('placeholder',data.username)
+            $('#first-name').attr('placeholder',data.first_name)
+            $('#last-name').attr('placeholder',data.last_name)
+            $('#phone').attr('placeholder',data.phone)
+            $('#email-edit').attr('placeholder',data.email)
+            $('#password-input').attr('hidden',true)
+            $('#button-save').attr('hidden',true)
+            $('#button-edit').attr('hidden',false)
+        })
+    }
+    function getData(){
+        $.get("{% url 'home:profile-json'%}", function(data){
+            $('#full-name').text(data.full_name)
+            $('#username1').text(data.username)
+            $('#message').attr('hidden',true)
+            if(data.contributor == true){
+                $('#contributor').text('Contributor')
+            } else{
+                $('#contributor').text('User')
+            }
+            $('#username2').attr('placeholder',data.username)
+            $('#first-name').attr('placeholder',data.first_name)
+            $('#last-name').attr('placeholder',data.last_name)
+            $('#phone').attr('placeholder',data.phone)
+            $('#email-edit').attr('placeholder',data.email)
+            $('#password-input').attr('hidden',true)
+            $('#button-save').attr('hidden',true)
+            $('#button-edit').attr('hidden',false)
+        })
+    }
+
+    function isNumber(n) { return !isNaN(parseFloat(n)) && !isNaN(n - 0) }
+
+    $(document).ready(function() {
+        getData()
+
+        $("#edit").click(function() {
+            $('#button-save').attr('hidden',false)
+            $('#password').attr('hidden',false)
+            $('#button-edit').attr('hidden',true)
+            $('#username2').attr('disabled',false)
+            $('#first-name').attr('disabled',false)
+            $('#last-name').attr('disabled',false)
+            $('#phone').attr('disabled',false)
+            $('#email-edit').attr('disabled',false)
+            $('#password-input').attr('hidden',false)
+        })
+
+        $("#cancel").click(function() {
+            $('#button-save').attr('hidden',true)
+            $('#password').attr('hidden',true)
+            $('#button-edit').attr('hidden',false)
+            $('#username2').attr('disabled',true)
+            $('#username2').removeClass("border-success")
+            $('#username2').removeClass("border-danger")
+            $('#first-name').attr('disabled',true)
+            $('#first-name').removeClass("border-success")
+            $('#first-name').removeClass("border-danger")
+            $('#last-name').attr('disabled',true)
+            $('#last-name').removeClass("border-success")
+            $('#last-name').removeClass("border-danger")
+            $('#phone').attr('disabled',true)
+            $('#phone').removeClass("border-success")
+            $('#phone').removeClass("border-danger")
+            $('#email-edit').attr('disabled',true)
+            $('#email-edit').removeClass("border-success")
+            $('#email-edit').removeClass("border-danger")
+            $('#password-input').attr('hidden',true)
+            $("#profile-edit").each(function(){
+            this.reset();
+            })
+            getData()
+        })
+
+        $("#email-edit").change(function(){
+            if(!$(this).val()){
+                $('#message').attr('hidden',true)
+                $('#email-edit').removeClass("border-danger")
+                $('#email-edit').removeClass("border-success")
+            } else{
+                if(ValidateEmail($(this).val())){
+                    $.ajax({
+                        url : '/validate-email/',
+                        data : {'email' : $(this).val()},
+                        type : 'GET',
+                        dataType : 'json',
+                        success: function(data){
+                            if(data.exists){
+                                $('#message').attr('hidden',false)
+                                $('#message-label').text("Email already been used")
+                                $('#email-edit').addClass("border-danger")
+                            } else {
+                                $('#message').attr('hidden',true)
+                                $('#message-label').text("")
+                                $('#email-edit').removeClass("border-danger")
+                                $('#email-edit').addClass("border-success")
+                            }
+                        }
+                    })
+                } else{
+                    $('#message').attr('hidden',false)
+                    $('#message-label').text("Email invalid")
+                    $('#email-edit').addClass("border-danger")
+                }
+            }
+        })
+
+        $("#first-name").change(function(){
+            if(!$(this).val()){
+                $('#first-name').removeClass("border-success")
+            } else {
+                $('#first-name').addClass("border-success")
+            }
+        })
+
+        $("#last-name").change(function(){
+            if(!$(this).val()){
+                $('#last-name').removeClass("border-success")
+            } else {
+                $('#last-name').addClass("border-success")
+            }
+        })
+
+        $("#phone").change(function(){
+            if(!$(this).val()){
+                $('#message').attr('hidden',true)
+                $('#phone').removeClass("border-danger")
+                $('#phone').removeClass("border-success")
+            } else{
+                if(isNumber($(this).val()) && $(this).val().length <= 12){
+                    $.ajax({
+                        url : '/validate-phone/',
+                        data : {'phone' : $(this).val()},
+                        type : 'GET',
+                        dataType : 'json',
+                        success: function(data){
+                            if(data.exists){
+                                $('#message').attr('hidden',false)
+                                $('#message-label').text("Phone number already been registered")
+                                $('#phone').addClass("border-danger")
+                            } else {
+                                $('#message').attr('hidden',true)
+                                $('#message-label').text("")
+                                $('#phone').removeClass("border-danger")
+                                $('#phone').addClass("border-success")
+                            }
+                        }
+                    })
+                } else{
+                    $('#message').attr('hidden',false)
+                    $('#message-label').text("Phone number invalid")
+                    $('#phone').addClass("border-danger")
+                }
+            }
+        })
+
+        $("#username2").change(function(){
+            if(!$(this).val()){
+                $('#message').attr('hidden',true)
+                $('#username2').removeClass("border-danger")
+                $('#username2').removeClass("border-success")
+            } else{
+                $.ajax({
+                    url : '/validate-username/',
+                    data : {'username' : $(this).val()},
+                    type : 'GET',
+                    dataType : 'json',
+                    success: function(data){
+                        if(data.exists){
+                            $('#message').attr('hidden',false)
+                            $('#message-label').text("Username already exists")
+                            $('#username2').addClass("border-danger")
+                        } else {
+                            $('#message').attr('hidden',true)
+                            $('#message-label').text("")
+                            $('#username2').removeClass("border-danger")
+                            $('#username2').addClass("border-success")
+                        }
+                    }
+                })
+            }
+        })
+
+        $("#save").click(function(e) {
+            e.preventDefault()
+
+            var usernameValue, firstNameValue, lastNameValue, phoneNumberValue, emailValue
+            if(!$("#password").val()){
+                $('#message').attr('hidden',false)
+                $('#message-label').text('Please confirm your password!')
+            } else{
+                if(!$('#username2').val()){
+                    usernameValue = $('#username2').attr("placeholder")
+                } else{
+                    usernameValue = $('#username2').val()
+                }
+                if(!$('#first-name').val()){
+                    firstNameValue = $('#first-name').attr("placeholder")
+                } else{
+                    firstNameValue = $('#first-name').val()
+                }
+                if(!$('#last-name').val()){
+                    lastNameValue = $('#last-name').attr("placeholder")
+                } else{
+                    lastNameValue = $('#last-name').val()
+                }
+                if(!$('#phone').val()){
+                    phoneNumberValue = $('#phone').attr("placeholder")
+                } else{
+                    phoneNumberValue = $('#phone').val()
+                }
+                if(!$('#email-edit').val()){
+                    emailValue = $('#email-edit').attr("placeholder")
+                } else{
+                    emailValue = $('#email-edit').val()
+                }
+
+                const formData = {
+                    csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+                    username: usernameValue,
+                    first_name: firstNameValue,
+                    last_name: lastNameValue,
+                    phone_number: phoneNumberValue,
+                    email: emailValue,
+                    password: $('#password').val(),
+                }
+                $.ajax({
+                    async: true,
+                    url: "/profile-update/",
+                    type: "POST",
+                    data: formData,
+                    dataType: 'json',
+                    success: function(response){
+                        $('#button-save').attr('hidden',true)
+                        $('#password').attr('hidden',true)
+                        $('#button-edit').attr('hidden',false)
+                        $('#username2').attr('disabled',true)
+                        $('#username2').removeClass("border-success")
+                        $('#first-name').attr('disabled',true)
+                        $('#first-name').removeClass("border-success")
+                        $('#last-name').attr('disabled',true)
+                        $('#last-name').removeClass("border-success")
+                        $('#phone').attr('disabled',true)
+                        $('#phone').removeClass("border-success")
+                        $('#email-edit').attr('disabled',true)
+                        $('#email-edit').removeClass("border-success")
+                        $('#password').attr('hidden',true)
+                        $("#profile-edit").each(function(){
+                            this.reset();
+                        })
+                        $('#message-label').text(response['message'])
+                        getDataSuccess()
+                    },
+                    error: function(response){
+                        $('#message').attr('hidden',false)
+                        $('#message-label').text(response.responseJSON['error'])
+                    }
+                })
+            }            
+        })
+    })
+</script>
+
+{% endblock content %}
