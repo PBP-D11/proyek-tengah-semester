@@ -15,31 +15,36 @@ from wishlist.forms import *
 from wishlist.models import *
 
 
+@csrf_exempt
 def create_car_ajax(request):
-    if request.user.is_authenticated:
-        if request.method == 'POST':
-            form = CarForm(request.POST)
-            if form.is_valid():
-                name = form.cleaned_data.get('name')
-                price = form.cleaned_data.get('price')
-                link_buy = form.cleaned_data.get('link_buy')
-                photo = form.cleaned_data.get('photo')
-                car = Car.objects.create(
-                    name=name, price=price,  user=request.user, link_buy=link_buy, photo=photo)
+    if request.method == 'POST':
+        user = authenticate(username=request.user.username,
+                            password=request.POST['password'])
+        if user is None:
+            return JsonResponse({"error": "Wrong password!"}, status=403)
 
-                car.save()
-                context = {
-                    'pk': car.pk,
-                    'fields': {
-                        'name': car.name,
-                        'price': car.price,
-                        'photo': car.photo,
-                        'link_buy': link_buy,
-                        'car': car
-                    }
+        form = CarForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data.get('name')
+            price = form.cleaned_data.get('price')
+            link_buy = form.cleaned_data.get('link_buy')
+            photo = form.cleaned_data.get('photo')
+            car = Car.objects.create(
+                name=name, price=price,  user=request.user, link_buy=link_buy, photo=photo)
+
+            car.save()
+            context = {
+                'pk': car.pk,
+                'fields': {
+                    'name': car.name,
+                    'price': car.price,
+                    'photo': car.photo,
+                    'link_buy': link_buy,
+                    'car': car
                 }
-                return JsonResponse(context)
-            return JsonResponse({'error': True})
+            }
+            return JsonResponse(context)
+        return JsonResponse({'error': True})
 
 
 def delete_car_ajax(request, id):
@@ -50,12 +55,11 @@ def delete_car_ajax(request, id):
 
 
 def show_json_car(request):
-    if request.user.is_authenticated:
-        data_car = Car.objects.filter(user=request.user)
-        return HttpResponse(serializers.serialize("json", data_car), content_type="application/json")
+    data_car = Car.objects.all()
+    return HttpResponse(serializers.serialize("json", data_car), content_type="application/json")
 
 
-def show_car(request):
+def show_wishlist(request):
     if request.user.is_authenticated:
         modelCar = Car.objects.filter(user=request.user)
         form = CarForm()
@@ -65,3 +69,25 @@ def show_car(request):
         }
         return render(request, 'wishlist.html', context)
     return render(request, 'index.html')
+
+
+def show_catalog(request):
+    form = CarForm()
+    model_car = Car.objects.all()
+    context = {
+        'data': model_car,
+        'form': form,
+    }
+    return render(request, "wishlist_catalog.html", context)
+
+
+def add_catalog(request):
+    if request.method == 'POST':
+        this_car_Catalog = Car()
+        this_car_Catalog.name = request.POST.get('name')
+        this_car_Catalog.price = request.POST.get('price')
+        this_car_Catalog.photo = request.POST.get('photo')
+        this_car_Catalog.link_buy = request.POST.get('link_buy')
+        this_car_Catalog.save()
+        return HttpResponse(b"CREATED", status=201)
+    return HttpResponseNotFound()
