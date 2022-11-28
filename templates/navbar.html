@@ -1,0 +1,37 @@
+<nav class="sticky z-50 top-0 md:px-20 px-4 py-4 bg-abu-tua shadow-2xl md:flex md:items-center md:justify-between" id="navbar">
+  <div class="flex gap-2 md:w-full justify-between">
+    <a href="{% url 'home:main' %}">
+    <div class="text-2xl font-bold text-[#fff] flex items-center cursor-pointer hover:text-cream-tua">
+      EVeryday!
+    </div>
+    </a>
+    <div class="text-3xl cursor-pointer flex items-center md:hidden">
+      <ion-icon name="menu" onclick="menu(this)" class="fill-white"></ion-icon>
+    </div>
+  </div>
+  <div id="list-navbar"
+    class="text-base text-white hidden md:show md:flex md:flex-row md:items-center md:justify-end">
+    <div class="md:mx-5 my-3 md:my-0">
+      <a href="#catat" class="hover:text-cream-tua hover:text-lg duration-500">Charging</a>
+    </div>
+    <div class="md:mx-5 my-3 md:my-0">
+      <a href="#catat" class="hover:text-cream-tua hover:text-lg duration-500">Services</a>
+    </div>
+    <div class="md:mx-5 my-3 md:my-0">
+      <a href="#catat" class="hover:text-cream-tua hover:text-lg duration-500">Wishlist</a>
+    </div>
+    <div class="md:mx-5 my-3 md:my-0">
+      <a href="{#catat" class="hover:text-cream-tua hover:text-lg  duration-500">Forums</a>
+    </div>
+    <div class="md:mx-5 my-3 md:my-0">
+      <a href="#catat" class="hover:text-cream-tua hover:text-lg  duration-500">News</a>
+    </div>
+    <div class="md:ml-5 p-5 bg-abu-tua rounded-lg w-fit text-white text-base py-2 my-3 md:my-0">
+      {% if user.is_authenticated %}
+      <button><a href="#catat" class="hover:text-cream-tua">Logout</a></button>
+      {% else %}
+      <button><a href="#catat" class="hover:text-cream-tua">Login</a></button>
+      {% endif %}
+    </div>
+  </div>
+</nav>

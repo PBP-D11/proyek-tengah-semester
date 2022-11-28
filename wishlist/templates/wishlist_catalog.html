@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Wishlist</title>
+<style>
+    .card {
+      margin-top: 20px;
+      margin-left: 25%;
+      margin-right: 25%;
+      margin-bottom: 20px;
+  }
+  
+  .card:hover{
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+  }
+  </style>
+
+{% endblock meta %}
+
+
+
+
+{% block content %}
+<!-- <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="{% static 'js/wishlist_logic.js' %}"></script> -->
+    {% if user.is_authenticated %}
+        <div id="navbar"></div>
+
+        <script>
+        $(function() {
+        $("#navbar").load("/static/navbar_auth.html");
+        });
+        </script>
+
+    {% else %}
+        <div id="navbar"></div>
+
+    <script>
+        $(function() {
+        $("#navbar").load("/static/navbar.html");
+        });
+    </script>
+
+    {% endif %} 
+
+
+    <div class="container">
+        <center>
+        <h1 class="text-6xl mb-4 ">❤️</h1>
+        <h1 class="text-4xl "> MY WISHLIST </h1>
+        <p style="text-align:center ;">Have a New Car Collection? </p>
+        <div class="row justify-content-md-center">
+            <div class="col col-lg-1">
+                <button id="submit" type="submit" type="button" value="Submit" class="btn btn-primary" data-bs-toggle="modal" href="#addCarModal">Add Car</button>
+            
+              </div>
+              <div class="col-md-auto">
+                <button id="submit" type="submit" type="button" value="Submit" class="btn btn-primary" data-bs-toggle="modal" href="{% url 'wishlist:show_wishlist' %}">See My Wishlist</button>
+            
+              </div>
+        </div>
+    </center>
+    </div>
+
+    <div class="modal fade" id="addCarModal" tabindex="-1" aria-labelledby="addCarModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addCarModalLabel">Create New Car Collection</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body">
+              <form id="form" onsubmit="return false;">
+                {% csrf_token %}  
+                <table>  
+                    {{ form.as_table }}
+                </table>  
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button id="submit" type="submit" type="button" value="Submit" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
+            </div>
+          </form>
+          </div>
+        </div>
+      </div>
+
+      <div id="all_car"></div>
+    
+
+    <style>
+    .modalCenter{
+        top:40% !important;
+        transform: translateY(-40%) !important;
+    }
+    </style>
+
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <script>
+        async function getCar() {
+            return fetch('/wishlist/json/').then((res) => res.json())
+        }
+
+        async function refreshCar() {
+            document.getElementById("all_car").innerHTML = ""
+            const Car = await getCar()
+        let htmlString = ``
+
+        wishlist.forEach((item)=>{
+            htmlString += `\n<div class="card">
+                <h5 class="card-header">${item.fields.name}</h5>
+                <div class="card-body">
+                    <h5 class="card-header">${item.fields.prices}</h5>
+                    <img class="card-img-top" src=${item.fields.photo} style="width: 150px;">
+                    <a href=${item.fields.link_buy} class="btn btn-primary" role="button" aria-disabled="false" target="_blank">Google Map</a>
+                </div>
+                </div>
+            
+                <br>
+                `})
+                document.getElementById("all_car").innerHTML = htmlString
+ 
+        }
+
+        function addCar() {
+            fetch('add/', {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+          }).then(refreshCar)
+        return false
+  }
+
+  document.getElementById("submit").onclick = addCar
+  refreshCar()
+</script>
+
+{% endblock content %}

@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Wishlist</title>
+{% endblock meta %}
+
+{% block content %}
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="{% static 'js/wishlist_logic.js' %}"></script>
+  
+  <div class="bg-gray relative h-full w-screen flex flex-col justify-center mt-0 items-center">
+    <h1 class="text-6xl mb-4 ">❤️</h1>
+    <center><h1 class="text-4xl "> MY WISHLIST </h1></center>
+    <script>
+    $(document).ready(function(){
+      $.get(window.location.href + "json/",function(data){
+        console.log(data)
+        for(let i=0; i<data.length;i++){
+          cardCar(data[i])
+        }
+      });
+
+      // function cardCar(data){
+      //   $('#wishlist').append(
+      //     `<div id = "${data.pk}--car" class = "rounded-lg pl-6 pr-6 py-5 bg-black shadow-md hover:shadow-xl">
+      //         <div>
+      //           <h1 id = "${data.pk}--name" class = "text-lg font-bold">${data.fields.name}</h1>
+      //           <p id = "${data.pk}--price" class="text-abu-muda text-base mb-4">${data.fields.price}</p>
+      //         </div>
+      //     </div>`);
+      // }
+
+      $("#tambah").click(function(){
+        $.post(  "/wishlist/create-ajax/",{
+          name:$("#name").val(),
+          price:$("#price").val(),
+          // target_buy:$("#name").val(),
+          // name:$("#name").val(),
+        },
+        function(data,status){
+          console.log("risa")
+          if (data.hasOwnProperty('error')) {
+              useAlert()
+            } else {
+              useSuccess()
+              cardCar(data)
+              $('#name').val('')
+              $('#price').val('')
+              $(`#modalTambah`).modal('hide')
+            }
+        })
+
+        
+      })
+    })
+
+  
+
+
+  </script>
+<style>
+  .modalCenter{
+    top:40% !important;
+    transform: translateY(-40%) !important;
+  }
+</style>
+
+</head>
+
+
+<body class = "text-black">
+  <div id="wishlist">
+  </div>
+
+  <!-- Bagian Awal & Button Tambah Mobil -->
+  <div class = "px-4 sm:px-8 md:px-20">
+    <!-- LOGIN ? HALLO NAMA | HALLO -->
+    <button id="tambahMobil" class="btn bg-abu-tua hover:bg-abu-muda text-white" data-bs-toggle="modal" data-bs-target="#modalTambah">Tambah Mobil</button>
+    <button id="lihatWishlist" class="btn bg-abu-tua hover:bg-abu-muda text-white" data-bs-toggle="modal" data-bs-target="#myWishlistPage">Lihat Wishlist</button>
+    <div class = "grid md:grid-cols-2 lg:grid-cols-3 w-full gap-5 mt-8 sm:mt-5" id = "wishlist"></div>
+  </div>
+
+  <!-- Modal Tambah Mobil -->
+  <div class="modal fade" id="modalTambah" tabindex="-1" role="dialog" aria-labelledby="createCarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modalCenter">
+      <div class="modal-content">
+
+
+        <div class="modal-header">
+          <h5 class="modal-title text-black font-bold" id="createCarModalLabel">Tambah Car</h5>
+        </div>
+
+
+        <div class="modal-body">
+          <form method="POST" action="#">
+            {% csrf_token %}
+            <div class="fieldWrapper mb-3">
+              <label for="name" class="col-form-label">Nama Mobil :</label>
+              {{ form.name }}
+            </div>
+            <div class="fieldWrapper mb-3">
+              <label for="price" class="col-form-label">Harga Mobil :</label>
+              {{ form.price }}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="text-sm sm:text-md bg-abu-tua hover:bg-abu-muda w-fit text-white p-3 rounded-lg flex items-center justify-center" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" id="tambah" type="button" class="text-sm sm:text-md bg-abu-tua hover:bg-abu-muda w-fit text-white p-3 rounded-lg flex items-center justify-center">Tambah</button>
+            </div>
+          </form>
+        </div>
+
+
+
+
+      </div>
+    </div>
+  </div>
+</body>
+
+<br>
+{% endblock content %}
