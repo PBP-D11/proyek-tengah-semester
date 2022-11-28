@@ -58,8 +58,11 @@
             
               </div>
               <div class="col-md-auto">
-                <button id="submit" type="submit" type="button" value="Submit" class="btn btn-primary" data-bs-toggle="modal" href="{% url 'wishlist:show_wishlist' %}">See My Wishlist</button>
-            
+                {% if user.is_authenticated %}
+                  <button id="submit" type="submit" type="button" value="Submit" class="btn btn-primary" data-bs-toggle="modal" href="{% url 'wishlist:show_wishlist' %}">See My Wishlist</button>
+                  {% else %} 
+                  <button id="submit" type="submit" type="button" value="Submit" class="btn btn-primary" data-bs-toggle="modal" href="{% url 'home:login' %}">See My Wishlist</button>
+                  {% endif %} 
               </div>
         </div>
     </center>
