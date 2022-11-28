@@ -31,8 +31,8 @@ SECRET_KEY = 'django-insecure-2nl!c**8&dz0p_*8#6&!$kjp^1w)d@co&^-r%k6pjx(#yg32!7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
-
+HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME', '')
+ALLOWED_HOSTS = [f'{HEROKU_APP_NAME}.up.railway.app']
 
 # Application definition
 
@@ -62,6 +62,20 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+]
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
+CSRF_TRUSTED_ORIGINS = ['https://ev-ryday.up.railway.app']
 
 ROOT_URLCONF = 'project_tengah_semester.urls'
 
