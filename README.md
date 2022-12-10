@@ -7,7 +7,7 @@ Selamat datang ke repositori kelompok D11, yaitu aplikasi yang bernama EV-ryday!
 > diselenggarakan oleh Fakultas Ilmu Komputer, Universitas Indonesia
 > pada Semester Gasal, Tahun Ajaran 2022/2023.
 
-![Main Deployment Status](https://github.com/PBP-D11/proyek-tengah-semester/actions/workflows/dpl.yml/badge.svg?branch=main)
+[![Test and Deploy][actions-badge]][commits-gh]
 
 ## 🧑🏻‍💻 Pengembang Aplikasi : Kelompok - D11👩🏻‍💻
 
