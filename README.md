@@ -20,7 +20,7 @@ Selamat datang ke repositori kelompok D11, yaitu aplikasi yang bernama EV-ryday!
 
 ## 🚘 Tautan Aplikasi Heroku 🚘
 
-Proyek ini dapat diakses di [ev-ryday.herokuapp.com](https://ev-ryday.herokuapp.com/)
+Proyek ini dapat diakses di [ev-ryday.herokuapp.com](https://ev-ryday.up.railway.app)
 
 ## 📃 Cerita aplikasi yang diajukan serta manfaatnya 📃
 
