@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-2nl!c**8&dz0p_*8#6&!$kjp^1w)d@co&^-r%k6pjx(#yg32!7
 DEBUG = True
 
 HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME', '')
-ALLOWED_HOSTS = [f'{HEROKU_APP_NAME}.up.railway.app']
+ALLOWED_HOSTS = ['*'] #fix before push
 
 # Application definition
 
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'evices',
     'home',
     'findcharge',
@@ -62,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
