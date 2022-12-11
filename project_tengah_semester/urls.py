@@ -26,7 +26,8 @@ urlpatterns = [
     path('find-charge/', include('findcharge.urls')),
     path('news/', include('news.urls')),
     path('evorums/', include('evorumss.urls')),
-    path('wishlist/', include('wishlist.urls'))
+    path('wishlist/', include('wishlist.urls')),
+    path('evishlist/', include('evishlist.urls')),
 ]
 
 if settings.DEBUG:

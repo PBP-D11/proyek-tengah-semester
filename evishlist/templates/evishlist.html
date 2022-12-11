@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Find evishlist</title>
+<style>
+  .card {
+    margin-top: 20px;
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-bottom: 20px;
+}
+
+.card:hover{
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+}
+</style>
+{% endblock meta %}
+
+ {% block content %}
+
+ {% if user.is_authenticated %}
+<div id="navbar"></div>
+
+<script>
+$(function() {
+  $("#navbar").load("/static/navbar_auth.html");
+});
+</script>
+
+{% else %}
+<div id="navbar"></div>
+
+<script>
+$(function() {
+  $("#navbar").load("/static/navbar.html");
+});
+</script>
+{% endif %}
+
+ <div class="container">
+	<h2 style="text-align:center ;"> Find Your Best Collections! </h2>
+	<div style="text-align:center ;">
+      	<p style="text-align:center ;">Pilih Kategori Anda</p>
+      	<div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Kategori yang tersedia
+          </button>
+          <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'evishlist:show_evishlist_ajax' %}">Semua kategori</a></li>
+              {% for kategoria in daftar_kategori %}
+              <li><a class="dropdown-item" href="/evishlist/{{kategoria}}/">{{kategoria}}</a></li>
+              {% endfor %}
+          </ul>
+          <button type="button" class="btn btn-primary " data-bs-toggle="modal" href="#addevishlistModal" id="add-stn" modal">Add Collections</button>
+    	</div>
+	</div>
+  	
+</div>
+  
+  <div class="modal fade" id="addevishlistModal" tabindex="-1" aria-labelledby="addevishlistModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addevishlistModalLabel">Add evishlist</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+        <div class="modal-body">
+          <form id="form" onsubmit="return false;">
+            {% csrf_token %}  
+            <table>  
+                {{ form.as_table }}
+            </table>  
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button id="submit" type="submit" type="button" value="Submit" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+
+<div id="all_evishlist"></div>
+
+
+<script>
+  async function getevishlist() {
+    return fetch('/evishlist/json/').then((res) => res.json())
+  }
+
+  async function refreshevishlist() {
+        document.getElementById("all_evishlist").innerHTML = ""
+        const evishlist = await getevishlist()
+        let htmlString = ``
+        evishlist.forEach((item) => {
+          htmlString += `\n<div class="card mx-auto" style="width: 24rem;">
+            <div class="card-header" >
+            <img class="card-img-top" src=${item.fields.photo} style="width: 300px;">
+             </div>
+       
+        <div class="row">
+                <div class="col-sm" style="width: 500px">
+                      <div class="row justify-content-md-center mx-md-n5">
+                          <div class="col-sm" style="width: 500px">
+                              <h5 class="mx-auto" >${item.fields.name}</h5>
+                          </div>
+                          <div class="row justify-content-md-center mx-md-n5">
+                              <div class="col-sm">
+                                  <h5 > Rp. ${item.fields.price}  </h5>
+                              </div>
+                          </div>
+                          <div class="col-sm">
+                                  <h5 >${item.fields.category}</h5>
+                          </div>
+                      </div>
+                </div>
+              <div class="col-sm px-md-5">
+                <a href=${item.fields.link_buy} class="btn btn-primary" role="button" aria-disabled="false" target="_blank"> Detail </a>
+              </div>
+    </div>
+  </div>
+</div>
+         
+          </div>
+          </div>
+    
+          <br>`
+        })
+        
+        document.getElementById("all_evishlist").innerHTML = htmlString
+  }
+
+  function addevishlist() {
+    fetch('add/', {
+          method: "POST",
+          body: new FormData(document.querySelector('#form'))
+      }).then(refreshevishlist)
+    return false
+  }
+
+  document.getElementById("submit").onclick = addevishlist
+  refreshevishlist()
+</script>
+  
+  
+
+{% endblock content %}
