@@ -1,14 +1,5 @@
 from django.urls import path
-from home.views import main
-from home.views import login_user
-from home.views import register
-from home.views import logout_user
-from home.views import profile
-from home.views import profile_update
-from home.views import profile_json
-from home.views import validate_email
-from home.views import validate_phone
-from home.views import validate_username
+from home.views import *
 
 app_name = 'home'
 
@@ -23,4 +14,7 @@ urlpatterns = [
     path('validate-username/', validate_username, name='validate-username'),
     path('validate-email/', validate_email, name='validate-email'),
     path('validate-phone/', validate_phone, name='validate-phone'),
+    path('login-flutter/', login_user_flutter, name='login-flutter'),
+    path('register-flutter/', register_flutter, name='register-flutter'),
+    path('logout-flutter/',logout_user_flutter, name='logout-flutter'),
 ]

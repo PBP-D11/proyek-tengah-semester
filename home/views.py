@@ -1,3 +1,4 @@
+import json
 from multiprocessing import context
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
@@ -13,14 +14,11 @@ from django.http import JsonResponse
 from .models import UserProfile, CustomUser
 
 # Create your views here.
-
-
 def _redirect(request, url):
     nxt = request.GET.get("next", None)
     if nxt is not None:
         url = nxt
     return redirect(url)
-
 
 def main(request):
     return render(request, 'index.html')
@@ -29,7 +27,6 @@ def main(request):
 @login_required(login_url='/login/')
 def profile(request):
     return render(request, 'profile.html')
-
 
 @csrf_exempt
 def profile_update(request):
@@ -48,21 +45,21 @@ def profile_update(request):
         return HttpResponse()
 
 def validate_username(request):
-    username = request.GET.get('username',None)
+    username = request.GET.get('username')
     data = {
         'exists' : CustomUser.objects.filter(username=username).exists()
     }
     return JsonResponse(data)
 
 def validate_email(request):
-    email = request.GET.get('email', None)
+    email = request.GET.get('email')
     data = {
         'exists' : CustomUser.objects.filter(email=email).exists()
     }
     return JsonResponse(data)
 
 def validate_phone(request):
-    phone_number = request.GET.get('phone', None)
+    phone_number = request.GET.get('phone')
     data = {
         'exists' : CustomUser.objects.filter(phone_number=phone_number).exists()
     }
@@ -83,14 +80,38 @@ def profile_json(request):
     }
     return JsonResponse(context)
 
+@csrf_exempt
+def register_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        print(data)
 
+        username = data["username"]
+        email = data["email"]
+        password1 = data["password1"]
+        first_name = data["first_name"]
+        last_name = data["second_name"]
+
+        newUser = CustomUser(
+        username = username, 
+        email = email,
+        password = password1,
+        first_name = first_name,
+        last_name = last_name
+        )
+
+        newUser.save()
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
+
+@csrf_exempt
 def register(request):
     form = CustomUserCreationForm()
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
-        print("nyoba masuk dia")
         if form.is_valid():
-            print("masukkk")
             user = form.save()
             login(request, user)
             messages.success(request, 'Akun telah berhasil dibuat!')
@@ -98,6 +119,32 @@ def register(request):
     context = {'form': form}
     return render(request, 'register.html', context)
 
+@csrf_exempt
+def login_user_flutter(request):
+    print(request.POST)
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            # Redirect to a success page.
+            return JsonResponse({
+              "status": True,
+              "username": request.user.username,
+              "message": "Successfully Logged In!",
+            }, status=200)
+        else:
+            return JsonResponse({
+              "status": False,
+              "message": "Failed to Login, Account Disabled."
+            }, status=401)
+
+    else:
+        return JsonResponse({
+          "status": False,
+          "message": "Failed to Login, check your email/password."
+        }, status=401)
 
 def login_user(request):
     if request.method == 'POST':
@@ -112,6 +159,19 @@ def login_user(request):
     context = {}
     return render(request, 'login.html', context)
 
+@csrf_exempt
+def logout_user_flutter(request):
+    try:
+        logout(request)
+        return JsonResponse({
+                    "status": True,
+                    "message": "Successfully Logged out!"
+                }, status=200)
+    except:
+        return JsonResponse({
+          "status": False,
+          "message": "Failed to Logout"
+        }, status=401)
 
 def logout_user(request):
     logout(request)
