@@ -80,6 +80,22 @@ def profile_json(request):
     }
     return JsonResponse(context)
 
+def profile_json_flutter(request):
+    if request.method == 'GET':
+        user = CustomUser.objects.filter(username=request.GET.get('username'))
+        profile = UserProfile.objects.get(user=user).user
+        context = {
+            'full_name': profile.get_full_name(),
+            'username': profile.username,
+            'email': profile.email,
+            'contributor': profile.is_contributor,
+            'first_name': profile.first_name,
+            'last_name': profile.last_name,
+            'phone': profile.phone_number,
+            'password': profile.password,
+        }
+        return JsonResponse(context)
+
 @csrf_exempt
 def register_flutter(request):
     if request.method == 'POST':
