@@ -1,9 +1,10 @@
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.shortcuts import render
 from django.core import serializers
 from findcharge.forms import InputForm
 from findcharge.models import ChargingStation
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from history.models import History
 
 
@@ -67,6 +68,27 @@ def add_station(request):
         return HttpResponse(station_json, content_type="application/json")
 
     return HttpResponseNotFound()
+
+@csrf_exempt
+def add_station_ajax(request):
+    if request.method == 'POST:':
+        data = request.POST
+
+        nama_station = data.get("nama_station")
+        kota = data.get("kota")
+        alamat = data.get("alamat")
+        jam_buka = data.get("time_open")
+        jam_tutup = data.get("time_close")
+        link_gmap = data.get("link_gmap")
+
+        new_station = ChargingStation(nama_station=nama_station, \
+            kota=kota, alamat=alamat, time_open=jam_buka, \
+                time_close=jam_tutup, link_gmap=link_gmap)
+        
+        new_station.save()
+
+        return JsonResponse({"message:Berhasil!"})
+
 
 @login_required(login_url='/login/')
 def add_history(request, pk):
