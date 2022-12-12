@@ -13,18 +13,22 @@ def news(request):
 	json_data = json.loads(res)
 	t_length = len(json_data["articles"])
 
+	for i in range(t_length):
+		author = json_data["articles"][i]["author"]
+		title = json_data["articles"][i]["title"]
+		description = json_data["articles"][i]["description"]
+		url = json_data["articles"][i]["url"]
+		image = json_data["articles"][i]["urlToImage"]
+		if(not News.objects.filter(title=title).exists()):
+				news = News(author=author, title=title, description=description, url=url, image=image)
+				news.save()
+
 	# Create some python lists
 	author = []
 	title = []
 	description = []
 	url = []
 	image = []
-	for i in range(News.objects.count()):
-		author.append(News.objects.all()[i].author)
-		title.append(News.objects.all()[i].title)
-		description.append(News.objects.all()[i].description)
-		url.append(News.objects.all()[i].url)
-		image.append(News.objects.all()[i].image)
 	for i in range(t_length):
 		author.append(json_data["articles"][i]["author"])
 		title.append(json_data["articles"][i]["title"])
@@ -43,19 +47,21 @@ def add_news(request):
 	if request.method == "POST":
 		source = 	request.POST.get("source")
 		url = "https://newsapi.org/v2/everything?q=electric-vehicles&sources=" + source + "&pageSize=10&sortBy=popularity&apiKey=" + api_key
-		newNews = LinkNews(url=url)
-		newNews.save()
+		newLinkNews = LinkNews(url=url)
+		newLinkNews.save()
 		res = urllib.request.urlopen(url).read()
-		json_data = json.loads(res)
-		t_length = len(json_data["articles"])
+		new_json_data = json.loads(res)
+		t_length = len(new_json_data["articles"])
+		print(new_json_data)
 		for i in range(t_length):
-			author = json_data["articles"][i]["author"]
-			title = json_data["articles"][i]["title"]
-			description = json_data["articles"][i]["description"]
-			url = json_data["articles"][i]["url"]
-			image = json_data["articles"][i]["urlToImage"]
+			author = new_json_data["articles"][i]["author"]
+			title = new_json_data["articles"][i]["title"]
+			description = new_json_data["articles"][i]["description"]
+			url = new_json_data["articles"][i]["url"]
+			image = new_json_data["articles"][i]["urlToImage"]
 			if(not News.objects.filter(title=title).exists()):
 				newNews = News(author=author, title=title, description=description, url=url, image=image)
+				print(newNews)
 				newNews.save()
 		return HttpResponse(b"CREATED", status=201)
 	return HttpResponse()

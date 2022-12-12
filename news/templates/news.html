@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block meta %}
-<title>Home</title>
+<title>EV-News</title>
 {% endblock meta %}
 
 {% block content %}
@@ -71,27 +71,38 @@ $(function() {
     
     <section>
         <div class="container">
-            <div class="row justify-content-between align-items-top">
-            {% for author, title, description, url, image in zipped %}
-            <div class="card mb-3" style="width: 18rem;">
-                {% if image %}
-                    <img src="{{ image }}" class="card-img-top embed-responsive-item" alt="News Thumbnail">
-                {% else %}
-                    <img src="{% static 'img/unknown.png' %}" class="card-img-top embed-responsive-item" alt="...">
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title"><a class="link" href="{{ url }}">{{ title }}</a></h5>
-                    <p class="card-text">{{ description }}</p>
-                    <p class="card-text"><small class="text-muted"><i>-{{ author }}</i></small></p>
-                </div>
-            </div>
-            {% endfor %}
+            <div class="row justify-content-between align-items-top" id="all_news">
             </div>
         </div>
     </section>
   </body>
 
   <script>
+    async function getNews() {
+    return fetch('/news/json/').then((res) => res.json())
+    }
+
+    async function refreshNews() {
+        document.getElementById("all_news").innerHTML = ""
+        const news = await getNews()
+        let htmlString = ``
+        news.forEach((item) => {
+          htmlString += `\n<div class="card mb-3" style="width: 18rem;">
+                {% if '${item.fields.image}' %}
+                    <img src=${item.fields.image} class="card-img-top embed-responsive-item" alt="News Thumbnail">
+                {% else %}
+                    <img src="{% static 'img/unknown.png' %}" class="card-img-top embed-responsive-item" alt="...">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title"><a class="link" href=${item.fields.url}>${item.fields.title}</a></h5>
+                    <p class="card-text">${item.fields.description}</p>
+                    <p class="card-text"><small class="text-muted"><i>-${item.fields.author}</i></small></p>
+                </div>
+            </div>`
+        })
+        document.getElementById("all_news").innerHTML = htmlString
+    }
+
     $(document).ready(function(){
         $('#news-form').submit(function(e){
             e.preventDefault()
@@ -107,9 +118,10 @@ $(function() {
                 success: function(){
                     alert.message('Success')
                 }
+                })
             })
         })
-    })
-
-  </script>
-  {% endblock content %}
+        refreshNews()
+    </script>
+    
+    {% endblock content %}
