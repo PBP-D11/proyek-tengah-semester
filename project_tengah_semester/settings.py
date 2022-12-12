@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-2nl!c**8&dz0p_*8#6&!$kjp^1w)d@co&^-r%k6pjx(#yg32!7
 DEBUG = True
 
 HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME', '')
-ALLOWED_HOSTS = [f'{HEROKU_APP_NAME}.up.railway.app']
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
