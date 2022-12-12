@@ -1,4 +1,9 @@
 # Create your views here.
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, HttpResponseNotFound
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.core import serializers
 from django.shortcuts import render, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import FormMixin
@@ -9,11 +14,79 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-
+from home.models import CustomUser
 from .models import Topic, Post, Comment
 from .forms import CreateCommentForm
 
 # Topic views
+# def get_all_forum(request):
+#     forums = Post.objects.all()
+#     return HttpResponse(serializers.serialize("json", forums ), content_type="application/json")
+
+# def get_all_forum_by_topic(request, topic):
+#     forums = Post.objects.filter(topic=topic.lower())
+#     return HttpResponse(serializers.serialize("json", forums ), content_type="application/json")
+
+# def get_comment(request, forum_id):
+#     if request.method == "GET":
+#         forum = Post.objects.filter(id=forum_id).first()
+#         comments = Comment.objects.filter(forum=forum)
+
+#         return HttpResponse(serializers.serialize("json", comments), content_type="application/json")
+
+def show_json_post(request):
+    data = Post.objects.all()        
+    return HttpResponse(serializers.serialize('json', data), content_type="application/json")
+
+def show_json_post_by_topic(request, topic):
+    forumtopic = request.topic
+    data = Post.objects.filter(topic = forumtopic)
+    return HttpResponse(serializers.serialize('json', data), content_type="application/json")
+
+def show_json_comment(request):
+    data = Comment.objects.all()        
+    return HttpResponse(serializers.serialize('json', data), content_type="application/json")
+
+def show_json_topic(request):
+    data = Topic.objects.all()        
+    return HttpResponse(serializers.serialize('json', data), content_type="application/json")
+
+def get_comment(request, post_id):
+    if request.method == "GET":
+        post = Post.objects.filter(id=post_id).first()
+        comments = Comment.objects.filter(post=post)
+
+        return HttpResponse(serializers.serialize("json", comments), content_type="application/json")
+
+@csrf_exempt
+def add_comment(request, post_id):
+    if request.method == "POST":
+        #TODO: validate request payload
+        user = CustomUser.objects.get(username=request.POST["user"])
+        newComment = Comment()
+        newComment.post = Post.objects.get(id=post_id)
+        newComment.body = request.POST["body"]
+        newComment.author = user
+        newComment.save()
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+
+@csrf_exempt
+def add_post(request, topic_id):
+    if request.method == "POST":
+        #TODO: validate request payload
+        user = CustomUser.objects.get(username=request.POST["user"])
+        newPost = Post()
+        newPost.title = request.POST["title"]
+        newPost.topic = Topic.objects.get(id=topic_id)
+        newPost.body = request.POST["body"]
+        newPost.author = user
+        newPost.save()
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+
 
 class TopicListView(ListView):
     model = Topic
