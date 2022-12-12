@@ -1,11 +1,12 @@
 from django.urls import path
-from findcharge.views import add_history, add_station, show_filtered_station, show_json, show_json_filtered, show_station
+from findcharge.views import add_history, add_station, show_filtered_station, show_json, show_json_filtered, show_station, add_station_ajax
 
 app_name = 'findcharge'
 
 urlpatterns = [
     path('', show_station, name='show_station'),
     path('add/', add_station, name='add_station'),
+    path('add/ajax', add_station_ajax, name='add_station_ajax'),
     path('checkin/<int:pk>', add_history, name='add_history'),
     path('json/', show_json, name='show_json'),
     path('json/<str:kota>', show_json_filtered, name='show_json_filtered'),

@@ -1,12 +1,13 @@
 import datetime
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.core import serializers
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
@@ -47,8 +48,26 @@ def show_json_filtered(request, kota):
     filtered_car_service = CarService.objects.filter(city=kota)
     return HttpResponse(serializers.serialize("json", filtered_car_service), content_type="application/json")
 
+@csrf_exempt
+def add_evices_flutter(request):
+    if request.method == 'POST':
+        this_car_service = CarService()
+        data = request.POST
+        this_car_service.name = data['name']
+        this_car_service.phone = data['phone']
+        this_car_service.address = data['address']
+        this_car_service.city = data['city']
+        this_car_service.photo = data['photo']
+        this_car_service.time_open = data['time_open']
+        this_car_service.time_close = data['time_close']
+        this_car_service.link_gmap = data['link_gmap']
+        this_car_service.save()
+
+        return JsonResponse({"message":"SUCCESS"})
+    
 def add_evices_ajax(request):
     if request.method == 'POST':
+        print("HELLO")
         this_car_service = CarService()
         this_car_service.name = request.POST.get('name')
         this_car_service.phone = request.POST.get('phone')
