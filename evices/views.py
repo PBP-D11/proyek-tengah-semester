@@ -52,14 +52,15 @@ def show_json_filtered(request, kota):
 def add_evices_ajax(request):
     if request.method == 'POST':
         this_car_service = CarService()
-        this_car_service.name = request.POST.get('name')
-        this_car_service.phone = request.POST.get('phone')
-        this_car_service.address = request.POST.get('address')
-        this_car_service.city = request.POST.get('city')
-        this_car_service.photo = request.POST.get('photo')
-        this_car_service.time_open = request.POST.get('time_open')
-        this_car_service.time_close = request.POST.get('time_close')
-        this_car_service.link_gmap = request.POST.get('link_gmap')
+        data = request.POST
+        this_car_service.name = data['name']
+        this_car_service.phone = data['phone']
+        this_car_service.address = data['address']
+        this_car_service.city = data['city']
+        this_car_service.photo = data['photo']
+        this_car_service.time_open = data['time_open']
+        this_car_service.time_close = data['time_close']
+        this_car_service.link_gmap = data['link_gmap']
         this_car_service.save()
 
         return JsonResponse({"message":"SUCCESS"})
