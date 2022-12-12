@@ -72,6 +72,8 @@ Manfaat dari aplikasi EV-ryday adalah sebagai berikut:
 - Permasalahan : 
   1. Mencari tempat untuk sharing seputar mobil listrik
   2. Menemukan charging station baru dan ingin sharing kepada komunitas
+  
+  *test
 
 
 ## 📝 Modul dan Pembagiannya 📝
