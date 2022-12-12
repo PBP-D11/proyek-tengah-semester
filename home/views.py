@@ -82,8 +82,10 @@ def profile_json(request):
 
 def profile_json_flutter(request):
     if request.method == 'GET':
-        user = CustomUser.objects.filter(username=request.GET.get('username'))
-        profile = UserProfile.objects.get(user=user).user
+        data = request.GET
+        print(request.GET)
+        user = CustomUser.objects.filter(username=data['username'])
+        profile = UserProfile.objects.get(user=user[0]).user
         context = {
             'full_name': profile.get_full_name(),
             'username': profile.username,
