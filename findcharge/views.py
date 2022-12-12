@@ -71,15 +71,15 @@ def add_station(request):
 
 @csrf_exempt
 def add_station_ajax(request):
-    if request.method == 'POST:':
+    if request.method == 'POST':
         data = request.POST
 
-        nama_station = data.get("nama_station")
-        kota = data.get("kota")
-        alamat = data.get("alamat")
-        jam_buka = data.get("time_open")
-        jam_tutup = data.get("time_close")
-        link_gmap = data.get("link_gmap")
+        nama_station = data["nama_station"]
+        kota = data["kota"]
+        alamat = data["alamat"]
+        jam_buka = data["time_open"]
+        jam_tutup = data["time_close"]
+        link_gmap = data["link_gmap"]
 
         new_station = ChargingStation(nama_station=nama_station, \
             kota=kota, alamat=alamat, time_open=jam_buka, \
@@ -87,7 +87,7 @@ def add_station_ajax(request):
         
         new_station.save()
 
-        return JsonResponse({"message:Berhasil!"})
+        return JsonResponse({"message":"Berhasil!"})
 
 
 @login_required(login_url='/login/')
