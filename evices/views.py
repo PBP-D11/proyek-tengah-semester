@@ -49,7 +49,7 @@ def show_json_filtered(request, kota):
     return HttpResponse(serializers.serialize("json", filtered_car_service), content_type="application/json")
 
 @csrf_exempt
-def add_evices_ajax(request):
+def add_evices_flutter(request):
     if request.method == 'POST':
         this_car_service = CarService()
         data = request.POST
@@ -64,3 +64,21 @@ def add_evices_ajax(request):
         this_car_service.save()
 
         return JsonResponse({"message":"SUCCESS"})
+    
+def add_evices_ajax(request):
+    if request.method == 'POST':
+        print("HELLO")
+        this_car_service = CarService()
+        this_car_service.name = request.POST.get('name')
+        this_car_service.phone = request.POST.get('phone')
+        this_car_service.address = request.POST.get('address')
+        this_car_service.city = request.POST.get('city')
+        this_car_service.photo = request.POST.get('photo')
+        this_car_service.time_open = request.POST.get('time_open')
+        this_car_service.time_close = request.POST.get('time_close')
+        this_car_service.link_gmap = request.POST.get('link_gmap')
+        this_car_service.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()
