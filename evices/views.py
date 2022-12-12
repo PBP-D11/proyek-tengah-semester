@@ -47,6 +47,7 @@ def show_json_filtered(request, kota):
     filtered_car_service = CarService.objects.filter(city=kota)
     return HttpResponse(serializers.serialize("json", filtered_car_service), content_type="application/json")
 
+@csrf_exempt
 def add_evices_ajax(request):
     if request.method == 'POST':
         this_car_service = CarService()
@@ -60,6 +61,4 @@ def add_evices_ajax(request):
         this_car_service.link_gmap = request.POST.get('link_gmap')
         this_car_service.save()
 
-        return HttpResponse(b"CREATED", status=201)
-
-    return HttpResponseNotFound()
+        return JsonResponse({"message":"SUCCESS"})
